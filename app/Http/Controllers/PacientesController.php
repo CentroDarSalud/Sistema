@@ -28,7 +28,7 @@ class PacientesController extends Controller
      */
     public function index()
     {      $pacientes = Paciente::OrderBy('updated_at','DESC')->get();
-           $actividades = Activity::users(600)->get(); 
+           $actividades = Activity::users(600)->get();
            $especialidades = Especialidad::where('TIP_ESP','=',1)->get();
             $especialidades2 = Especialidad::where('TIP_ESP','=',2)->get();
             $medicos = User::where('NIV_USU','=',2)->get();
@@ -48,7 +48,7 @@ class PacientesController extends Controller
       $paciente->SEX_PAC= $request->input('mgen_pac');
       $paciente->save();
       $mensaje="Datos de paciente modificados";
-      return redirect()->route('pacientessegip')->with('mensaje',$mensaje); 
+      return redirect()->route('pacientessegip')->with('mensaje',$mensaje);
 
     }
 
@@ -62,7 +62,7 @@ class PacientesController extends Controller
         </tr>
         </thead>
         <tbody>';
-      
+
          foreach ($actividades as $activity):
             if($activity->user->NIV_USU==2){
           echo '<tr>
@@ -71,12 +71,12 @@ class PacientesController extends Controller
 
           if(count($tickets)==0)
           {
-          echo 'color:#1BF510'; 
+          echo 'color:#1BF510';
           }elseif(count($tickets)==1)
           {
-          echo 'color:#FCA720'; 
+          echo 'color:#FCA720';
           }elseif (count($tickets)>1) {
-              echo 'color:#FA0303'; 
+              echo 'color:#FA0303';
           }
           echo'"></span></td>
           <td>'.$activity->user->NOM_USU.' '.$activity->user->APA_USU.' '.$activity->user->AMA_USU.' - '.count($tickets).' Pacientes</td>';}
@@ -87,7 +87,7 @@ class PacientesController extends Controller
      public function consultaspac()
     {
         $ticket= Ticket::where('EST_TIC','=',0)->orwhere('EST_TIC','=',4)->join('pacientes','pacientes.id','=','ticket.ID_PAC')->join('users','users.id','=','ticket.ID_MED')->select('ticket.id','NOM_PAC','APA_PAC','AMA_PAC','ID_MED','EVA_TIC','NOM_USU','AMA_USU','APA_USU')->get();
-        
+
         echo '<thead>
         <tr>
         <th>Paciente</th>
@@ -99,7 +99,7 @@ class PacientesController extends Controller
       echo '
     <script type="text/javascript">
     function reasignar(data1,data2,data3,data4)
-    {       
+    {
       $('."'#NOMB_PAC').val(data1);
       $('#IDS_PAC').val(data2);
        $('#ESPE option[value=".'"'."'".'+data3+'."'".'"]'."').prop('selected','selected').change();
@@ -164,7 +164,7 @@ class PacientesController extends Controller
     if($tickets[0]->EVA_TIC=='Evaluacion medica' ||$tickets[0]->EVA_TIC=='Evaluacion otorrinolaringologica' || $tickets[0]->EVA_TIC=='Evaluacion psicologica' || $tickets[0]->EVA_TIC=='Evaluacion oftalmologica')
     {
         $nombre=  preg_replace('[\s+]','', $tickets[0]->EVA_TIC).'/'.$tickets[0]->id;
-      
+
         echo $tickets[0]->ID_PAC.'/'.strtolower($nombre);
     }else
     {
@@ -176,7 +176,7 @@ class PacientesController extends Controller
     if($tickets[0]->EVA_TIC=='Evaluacion medica' ||$tickets[0]->EVA_TIC=='Evaluacion otorrinolaringologica' || $tickets[0]->EVA_TIC=='Evaluacion psicologica' || $tickets[0]->EVA_TIC=='Evaluacion oftalmologica')
     {
         $nombre=  preg_replace('[\s+]','', $tickets[0]->EVA_TIC);
-      
+
         echo $tickets[0]->ID_PAC.'/'.strtolower($nombre).'/'.$tickets[0]->id;
     }else
     {
@@ -242,7 +242,7 @@ echo '<div style=" width:25%; height:auto;float:left; padding: 2%; margin-left:1
         $ticket->EST_TIC=3;
         $ticket->save();
         $mensaje='El paciente fue marcado como ausente';
-         return redirect()->route('/')->with('mensaje2',$mensaje); 
+         return redirect()->route('/')->with('mensaje2',$mensaje);
     }
     public function ticket(Request $request)
     {
@@ -254,7 +254,7 @@ echo '<div style=" width:25%; height:auto;float:left; padding: 2%; margin-left:1
         $ticket->IMP_TIC=0;
         $ticket->save();
         $mensaje='Medico asignado a paciente';
-        return redirect()->route('pacientessegip')->with('mensaje',$mensaje); 
+        return redirect()->route('pacientessegip')->with('mensaje',$mensaje);
     }
     public function mticket(Request $request)
     {
@@ -266,7 +266,7 @@ echo '<div style=" width:25%; height:auto;float:left; padding: 2%; margin-left:1
         $ticket->IMP_TIC=0;
         $ticket->save();
         $mensaje='Reasignacion realizada correctamente';
-        return redirect()->route('pacientessegip')->with('mensaje',$mensaje); 
+        return redirect()->route('pacientessegip')->with('mensaje',$mensaje);
     }
     public function reservaticket(Request $request)
     {
@@ -283,7 +283,7 @@ echo '<div style=" width:25%; height:auto;float:left; padding: 2%; margin-left:1
         $reserva->ID_TIC=$ticket->id;
         $reserva->save();
         $mensaje='Reserva realizada correctamente';
-        return redirect()->route('pacientessegip')->with('mensaje',$mensaje); 
+        return redirect()->route('pacientessegip')->with('mensaje',$mensaje);
     }
     public function producto(Request $request)
     {
@@ -297,8 +297,91 @@ echo '<div style=" width:25%; height:auto;float:left; padding: 2%; margin-left:1
         $productos->ID_USU= Auth::user()->id;
         $productos->save();
         $mensaje='Producto registrado correctamente';
-        return redirect()->route('farmacia')->with('mensaje',$mensaje); 
+        return redirect()->route('farmacia')->with('mensaje',$mensaje);
     }
+
+    public function modificarproducto(Request $request)
+    {
+        $id=$request->input('id_pro3');
+        $productos= Producto::find($id);
+        $productos->COD_PRO=$request->input('cod_pro3');
+        $productos->NOM_PRO= $request->input('nom_pro3');
+        $productos->DES_PRO= $request->input('des_pro3');
+        $productos->PRE_PRO= $request->input('pre_pro3');
+        $productos->CAN_PRO= $request->input('can_pro3');
+        $productos->FEC_PRO= $request->input('fec_pro3');
+        $productos->ID_USU= Auth::user()->id;
+        $productos->save();
+        $mensaje='Producto modificado correctamente';
+        return redirect()->route('farmacia')->with('mensaje',$mensaje);
+    }
+
+    public function entradaproducto(Request $request)
+    {
+      if($request->input('tip_ent')==0){
+        $id=$request->input('id_pro4');
+        $productos= Producto::find($id);
+        $productos->CAN_PRO= $productos->CAN_PRO + $request->input('can_pro4');
+        $productos->save();
+        $mensaje='Entrada registrada correctamente';
+        return redirect()->route('farmacia')->with('mensaje',$mensaje);
+      }
+      if($request->input('tip_ent')==1){
+        $id=$request->input('id_pro4');
+        $productos= Producto::find($id);
+        $producto= new Producto;
+        $producto->COD_PRO=$productos->COD_PRO;
+        $producto->NOM_PRO= $productos->NOM_PRO;
+        $producto->DES_PRO= $productos->DES_PRO;
+        $producto->PRE_PRO= $request->input('pre_pro4');
+        $producto->CAN_PRO= $request->input('can_pro4');
+        $producto->FEC_PRO= $productos->FEC_PRO;
+        $producto->ID_USU= Auth::user()->id;
+        $producto->save();
+        $mensaje='Producto modificado correctamente';
+        return redirect()->route('farmacia')->with('mensaje',$mensaje);
+    }
+    if($request->input('tip_ent')==2){
+      $id=$request->input('id_pro4');
+      $productos= Producto::find($id);
+      $producto= new Producto;
+      $producto->COD_PRO=$productos->COD_PRO;
+      $producto->NOM_PRO= $productos->NOM_PRO;
+      $producto->DES_PRO= $productos->DES_PRO;
+      $producto->PRE_PRO= $productos->PRE_PRO;
+      $producto->CAN_PRO= $request->input('can_pro4');
+      $producto->FEC_PRO= $request->input('fec_pro4');
+      $producto->ID_USU= Auth::user()->id;
+      $producto->save();
+      $mensaje='Producto modificado correctamente';
+      return redirect()->route('farmacia')->with('mensaje',$mensaje);
+    }
+    if($request->input('tip_ent')==3){
+      $id=$request->input('id_pro4');
+      $productos= Producto::find($id);
+      $producto= new Producto;
+      $producto->COD_PRO=$productos->COD_PRO;
+      $producto->NOM_PRO= $productos->NOM_PRO;
+      $producto->DES_PRO= $productos->DES_PRO;
+      $producto->PRE_PRO= $request->input('pre_pro4');
+      $producto->CAN_PRO= $request->input('can_pro4');
+      $producto->FEC_PRO= $request->input('fec_pro4');
+      $producto->ID_USU= Auth::user()->id;
+      $producto->save();
+      $mensaje='Producto modificado correctamente';
+      return redirect()->route('farmacia')->with('mensaje',$mensaje);
+    }
+  }
+  public function salidaproducto(Request $request)
+  {
+      $id=$request->input('id_pro5');
+      $productos= Producto::find($id);
+      $productos->CAN_PRO= $productos->CAN_PRO - $request->input('can_pro5');
+      $productos->save();
+      $mensaje='Salida registrada correctamente';
+      return redirect()->route('farmacia')->with('mensaje2',$mensaje);
+    }
+
     public function reservar(Request $request)
     {
         $ticket= new Ticket;
@@ -309,7 +392,7 @@ echo '<div style=" width:25%; height:auto;float:left; padding: 2%; margin-left:1
         $ticket->IMP_TIC=0;
         $ticket->save();
         $mensaje='Reserva satisfactoria';
-        return redirect()->route('pacientessegip')->with('mensaje',$mensaje); 
+        return redirect()->route('pacientessegip')->with('mensaje',$mensaje);
     }
     public function psicologica($id, $ids)
     {   $paciente= Paciente::find($id);
@@ -319,7 +402,7 @@ echo '<div style=" width:25%; height:auto;float:left; padding: 2%; margin-left:1
         return view('evapsico')->with('paciente',$paciente)->with('id',$id)->with('ids',$ids);
     }
 
-    
+
     public function medica($id, $ids)
     {   $paciente= Paciente::find($id);
         $tickets= Ticket::find($ids);
@@ -359,7 +442,7 @@ echo '<div style=" width:25%; height:auto;float:left; padding: 2%; margin-left:1
         $tickets->EST_TIC=2;
         $tickets->save();
         $mensaje='Consulta finalizada';
-         return redirect()->route('/')->with('mensaje2',$mensaje); 
+         return redirect()->route('/')->with('mensaje2',$mensaje);
     }
     public function medicosact()
     {   $actividades = Activity::users(600)->get();
@@ -388,7 +471,7 @@ echo '<div style=" width:25%; height:auto;float:left; padding: 2%; margin-left:1
         echo $html.$html2.$html3;
     }
     public function datospac()
-    { $id= $_POST['id'];  
+    { $id= $_POST['id'];
       $paciente=Paciente::find($id);
       $html= '<div class="form-group">
                     <label class="col-lg-2">Apellido paterno: </label>
@@ -399,7 +482,7 @@ echo '<div style=" width:25%; height:auto;float:left; padding: 2%; margin-left:1
                     <div class="col-lg-3">
                         <input type="text" class="form-control" readonly="readonly" name="" value="'.$paciente->AMA_PAC.'">
                     </div>
-                   
+
                 </div>
                 <div class="form-group">
                     <label class="col-lg-2">Nombres: </label>
@@ -412,20 +495,20 @@ echo '<div style=" width:25%; height:auto;float:left; padding: 2%; margin-left:1
                     </div>
                 </div>
                 <div class="form-group">
-                    
+
                     <label class="col-lg-2">Sexo: </label>
                     <div class="col-lg-3">
                         <input type="text" readonly="readonly" class="form-control" name="" value="'.$paciente->SEX_PAC.'">
                     </div>                                   <label class="col-lg-2">Edad: </label>
                     <div class="col-lg-3">
                         <input type="text" readonly="readonly" class="form-control" name="" value="';
-      $edad = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente->FEC_NAC)->format('Y'); 
+      $edad = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente->FEC_NAC)->format('Y');
       $edad2 = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente->FEC_NAC)->format('m');
       $edad3 = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente->FEC_NAC)->format('d');
-      
+
       $date = \Carbon\Carbon::createFromDate($edad,$edad2,$edad3)->age;
        $html=$html.$date.'">
-                    </div>                                  
+                    </div>
                 </div>';
         echo $html;
     }
@@ -460,11 +543,11 @@ echo '<div style=" width:25%; height:auto;float:left; padding: 2%; margin-left:1
         $pacientes->ID_USU= Auth::user()->id;
         $pacientes->save();
         $mensaje='Usuario registrado correctamente';
-         return redirect()->route('pacientessegip')->with('mensaje',$mensaje); 
+         return redirect()->route('pacientessegip')->with('mensaje',$mensaje);
     }
 
     public function listapacientes()
-    {   
+    {
         $pacientes=Paciente::get();
         return view('paciente')->with('pacientes',$pacientes);
     }

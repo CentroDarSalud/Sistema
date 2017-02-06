@@ -27,7 +27,13 @@ Route::post('consultoriospac','PacientesController@consultaspac');
 Route::post('registroticket','PacientesController@ticket');
 Route::post('modificarticket','PacientesController@mticket');
 Route::post('reservaticket','PacientesController@reservaticket');
+
+
 Route::post('registrarproducto','PacientesController@producto');
+Route::post('modificarproducto','PacientesController@modificarproducto');
+Route::post('entradaproducto','PacientesController@entradaproducto');
+Route::post('salidaproducto','PacientesController@salidaproducto');
+
 Route::post('reservar','PacientesController@reservar');
 Route::post('atencion','PacientesController@atencion');
 Route::post('ausente','PacientesController@ausente');
