@@ -33,21 +33,21 @@ class ClientesTableSeeder extends Seeder
      */
     public function run()
     {
-        
+
         User::create([
-            'NOM_USU' => 'Ana Maria',
-            'APA_USU' => 'Zapata',
-            'AMA_USU' => 'Guzman',
+            'NOM_USU' => 'Luis',
+            'APA_USU' => 'Quisbert',
+            'AMA_USU' => 'Quispe',
             'EST_USU' => 'Dar salud 20 de octubre',
             'ARE_USU' => 'Medico',
             'TEL_USU' => '0',
-            'NIC_USU' => 'azapata',
-            'NIV_USU' => '2',
-            'password' => bcrypt('darsalud'),
+            'NIC_USU' => 'lquisbert',
+            'NIV_USU' => '1',
+            'password' => bcrypt('123456'),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon:: now()
         ]);
-       
+
     }
 
 }

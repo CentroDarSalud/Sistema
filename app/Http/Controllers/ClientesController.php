@@ -30,12 +30,15 @@ class ClientesController extends Controller
           $reservas= Reserva::join('ticket','ticket.id','=','ID_TIC')->join('pacientes','pacientes.id','=','ticket.ID_PAC')->join('users','users.id','=','ticket.ID_MED')->where('EST_TIC','!=',2)->where('FEC_RES','>=',Carbon::now()->toDateString())->where('ID_MED','=',Auth::user()->id)->get();
         return view('indexmed')->with('reservas',$reservas);
         }
+        elseif(Auth::user()->NIV_USU==1){
+        return view('administrador.indexadmin');
+        }
     }
-    
+
     public function index3()
     {
           $pacientes = Paciente::OrderBy('updated_at','DESC')->get();
-           $actividades = Activity::users(600)->get(); 
+           $actividades = Activity::users(600)->get();
            $especialidades = Especialidad::where('TIP_ESP','=',1)->get();
             $especialidades2 = Especialidad::where('TIP_ESP','=',2)->get();
             $medicos = User::where('NIV_USU','=',2)->get();
@@ -60,7 +63,7 @@ class ClientesController extends Controller
             $reservas= Reserva::join('ticket','ticket.id','=','ID_TIC')->join('pacientes','pacientes.id','=','ticket.ID_PAC')->join('users','users.id','=','ticket.ID_MED')->where('EST_TIC','!=',2)->where('ID_MED','=',Auth::user()->id)->get();
         return view('reservamed')->with('reservas',$reservas);
         endif;
-        
+
     }
 
     /**

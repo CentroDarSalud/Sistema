@@ -296,7 +296,7 @@
       <option value="CB">CB</option>
       <option value="SC">SC</option>
       <option value="OR">OR</option>
-      <option value="PO">PO</option>
+      <option value="PT">PT</option>
       <option value="CH">CH</option>
       <option value="TJ">TJ</option>
       <option value="BN">BN</option>
@@ -417,7 +417,7 @@
       <option value="CB">CB</option>
       <option value="SC">SC</option>
       <option value="OR">OR</option>
-      <option value="PO">PO</option>
+      <option value="PT">PT</option>
       <option value="CH">CH</option>
       <option value="TJ">TJ</option>
       <option value="BN">BN</option>

@@ -15,7 +15,7 @@
       $('#ID_PAC').val(data3);
 
     }
-</script> 
+</script>
 <script type="text/javascript">
     function asignar2(data1, data2,data3)
     {
@@ -24,55 +24,55 @@
       $('#ID_PACR').val(data3);
 
     }
-</script> 
+</script>
 <script language="javascript">
   function consultorios()
-  { id=1;  
+  { id=1;
     $.post("consultoriosmed", { id: id }, function(data){
-                $("#tablamed").html(data); 
-            });            
+                $("#tablamed").html(data);
+            });
       setTimeout('consultorios()',1000);
   }
   $(document).ready(function()
     {
         consultorios();
-    });  
+    });
 
 </script>
 <script language="javascript">
   function consultoriospac()
-  { id=1;  
+  { id=1;
     $.post("consultoriospac", { id: id }, function(data){
-                $("#tablapac").html(data); 
-            });            
+                $("#tablapac").html(data);
+            });
       setTimeout('consultoriospac()',1000);
   }
   $(document).ready(function()
     {
         consultoriospac();
-    });  
+    });
   function medicos()
-  { id=1;  
+  { id=1;
     $.post("medicos", { id: id }, function(data){
-                $("#cambio").html(data); 
-            });            
-      
+                $("#cambio").html(data);
+            });
+
   }
   $(document).ready(function()
     {
         medicos();
-    });  
+    });
   function medicos2()
-  { id=1;  
+  { id=1;
     $.post("medicos2", { id: id }, function(data){
-                $("#cambios").html(data); 
-            });            
-      
+                $("#cambios").html(data);
+            });
+
   }
   $(document).ready(function()
     {
         medicos2();
-    });  
+    });
 </script>
 <script type="text/javascript">
   function pasadatos(data1,data2,data3,data4,data5,data6,data7,data8,data9,data10)
@@ -112,14 +112,14 @@
          <?php endif;?>
 
 <button type="button" class = "btn btn-info" data-toggle = "modal" data-target = "#myModal"> <span class="glyphicon glyphicon-plus"></span>
-  Registrar nuevo paciente 
+  Registrar nuevo paciente
 </button>
 <div style="float:right; width: 35%; height:auto; ">
 <div style="border: 1px #000 solid; padding: 2%;">
 <fieldset>
 <legend class="label label-primary">CONSULTORIOS</legend>
   <table class="table table-hover" id="tablamed">
-    
+
   </table>
   </fieldset>
   </div>
@@ -128,7 +128,7 @@
 <fieldset>
 <legend class="label label-primary">Pacientes en espera</legend>
   <table class="table table-hover" id="tablapac">
-    
+
   </table>
   </fieldset>
 </div>
@@ -144,61 +144,61 @@
       <th width="20%">Fecha de nacimiento</th>
       <th data-orderable="false" width="5%">Asignar</th>
       <th data-orderable="false" width="5%">Reservar</th>
-      <th data-orderable="false" width="5%">Editar</th> 
+      <th data-orderable="false" width="5%">Editar</th>
     </tr>
   </thead>
-  
+
   <tbody style="font-size:11px;">
       <?php if(count($pacientes)>0):?>
       <tr>
-        <?php  
+        <?php
           foreach ($pacientes as $paciente):
             $nombre=$paciente->NOM_PAC.' '.$paciente->APA_PAC.' '.$paciente->AMA_PAC;
           ?>
             <th><?php echo $paciente->CI_PAC;?></th>
             <th><?php echo $nombre; ?></th>
             <th><?php echo $paciente->FEC_NAC;?></th>
-            <th><button  data-toggle = "modal" data-target = "#myModal4" class="btn btn-success" onclick="javascript:asignar( {{'"'. $paciente->CI_PAC.'","'.$nombre.'","'.$paciente->id.'"'}} );" title="Asignar medico"> <span class="fa fa-check"> </span> </button></th> 
-            <th><button  data-toggle = "modal" data-target = "#myModal2" class="btn btn-primary" onclick="javascript:asignar2( {{'"'. $paciente->CI_PAC.'","'.$nombre.'","'.$paciente->id.'"'}} );" title="Reservar"> <span class="fa fa-table"> </span> </button></th> 
-            <th><button class="btn btn-danger" title="Editar datos de paciente" data-toggle = "modal" data-target = "#myModal3" onclick="javascript:pasadatos(<?php echo "'".$paciente->id."','".$paciente->NOM_PAC."','".$paciente->APA_PAC."','".$paciente->AMA_PAC."','".$paciente->CI_PAC."','".$paciente->SEX_PAC."','".$paciente->FEC_NAC."','".$paciente->REF_PAC."','".$paciente->DOM_PAC."','".$paciente->PRO_PAC."'"?>)"> <span class="fa fa-magic"> </span> </button></th> 
+            <th><button  data-toggle = "modal" data-target = "#myModal4" class="btn btn-success" onclick="javascript:asignar( {{'"'. $paciente->CI_PAC.'","'.$nombre.'","'.$paciente->id.'"'}} );" title="Asignar medico"> <span class="fa fa-check"> </span> </button></th>
+            <th><button  data-toggle = "modal" data-target = "#myModal2" class="btn btn-primary" onclick="javascript:asignar2( {{'"'. $paciente->CI_PAC.'","'.$nombre.'","'.$paciente->id.'"'}} );" title="Reservar"> <span class="fa fa-table"> </span> </button></th>
+            <th><button class="btn btn-danger" title="Editar datos de paciente" data-toggle = "modal" data-target = "#myModal3" onclick="javascript:pasadatos(<?php echo "'".$paciente->id."','".$paciente->NOM_PAC."','".$paciente->APA_PAC."','".$paciente->AMA_PAC."','".$paciente->CI_PAC."','".$paciente->SEX_PAC."','".$paciente->FEC_NAC."','".$paciente->REF_PAC."','".$paciente->DOM_PAC."','".$paciente->PRO_PAC."'"?>)"> <span class="fa fa-magic"> </span> </button></th>
     </tr>
         <?php endforeach; endif;
-      
+
       ?>
-    
+
   </tbody>
 </table>
 </div>
 
 
 </fieldset>
-<div class = "modal fade " id = "myModal2" tabindex = "-1" role = "dialog" 
+<div class = "modal fade " id = "myModal2" tabindex = "-1" role = "dialog"
    aria-labelledby = "myModalLabel" aria-hidden = "true" >
-   
+
    <div class = "modal-dialog">
       <div class = "modal-content">
-         
+
          <div class = "modal-header">
             <button type = "button" class = "close" data-dismiss = "modal" aria-hidden = "true">
                   &times;
             </button>
-            
+
             <h4 class = "modal-title" id = "myModalLabel">
                Formulario de reserva
             </h4>
          </div>
          <div class = "modal-body">
          <form method="POST" action="reservaticket" class="form-horizontal">
-         
+
             <table class="table table-hover">
                 <input type="hidden" name="idr" id="ID_PACR">
-            <tr class=""> 
+            <tr class="">
               <td class="col-lg-2">CI: </td><td colspan="3"><input class="form-control col-lg-10" type="text" name="CI_PAC" id="CI_PACR" readonly="readonly"></td>
 
             </tr>
             <tr class="">
               <td class="col-lg-2">Paciente: </td><td colspan="3"><input class="form-control col-lg-10" name="NOM_PAC" id="NOM_PACR" type="text" readonly="readonly"></td>
-    
+
             </tr>
             <tr >
               <td class="col-lg-2">Especialidad: </td><td class="col-lg-4">
@@ -218,8 +218,8 @@
         <?php endforeach;?>
       </select>
     </td>
-    
-    
+
+
   </tr>
 
 </table>
@@ -238,7 +238,7 @@
               </div>
             </div>
 
-         
+
          </div>
          <div class = "modal-footer">
             <button type = "button" class = "btn btn-danger" data-dismiss = "modal"> <span class="fa fa-times"></span>
@@ -249,29 +249,29 @@
             </button>
           </form>
          </div>
-         
+
       </div><!-- /.modal-content -->
    </div><!-- /.modal-dialog -->
-  
+
 </div><!-- /.modal -->
 
 
-<div class = "modal fade " id = "myModal" tabindex = "-1" role = "dialog" 
+<div class = "modal fade " id = "myModal" tabindex = "-1" role = "dialog"
    aria-labelledby = "myModalLabel" aria-hidden = "true" >
-   
+
    <div class = "modal-dialog">
       <div class = "modal-content">
-         
+
          <div class = "modal-header">
             <button type = "button" class = "close" data-dismiss = "modal" aria-hidden = "true">
                   &times;
             </button>
-            
+
             <h4 class = "modal-title" id = "myModalLabel">
                Registro de nuevo paciente
             </h4>
          </div>
-         
+
          <div class = "modal-body">
             <form class="form-horizontal" method="POST" action="registrarpacientes">
             <div class="form-group">
@@ -296,7 +296,7 @@
       </select>
     </div>
     </div>
-    <div class="form-group"> 
+    <div class="form-group">
      <label  class="col-lg-2 control-label">Nombre :</label>
     <div class="col-lg-10">
       <input type="text" name="nom_pac" class="form-control" id="nom_pac"
@@ -306,18 +306,18 @@
    <div class="form-group">
     <label for="ejemplo_password_3" class="col-lg-2 control-label">Paterno :</label>
     <div class="col-lg-4">
-      <input type="text" class="form-control" name="apa_pac" id="apa_pac" 
+      <input type="text" class="form-control" name="apa_pac" id="apa_pac"
              placeholder="Apellido paterno">
     </div>
-   
+
     <label  class="col-lg-2 control-label">Materno :</label>
     <div class="col-lg-4">
       <input type="text" class="form-control" name="ama_pac" id="ama_pac"
              placeholder="Apellido materno">
     </div>
     </div>
-    
-    
+
+
     <div class="form-group">
     <label  class="col-lg-2 control-label">Genero :</label>
     <div class="col-lg-4">
@@ -360,36 +360,36 @@
             <button type = "button" class = "btn btn-danger" data-dismiss = "modal"> <span class="fa fa-times"></span>
               Cancelar
             </button>
-            
+
             <button type = "submit" class = "btn btn-primary">
               <span class="fa fa-check"></span> Registrar
             </button>
             </form>
          </div>
-         
+
       </div><!-- /.modal-content -->
    </div><!-- /.modal-dialog -->
-  
+
 </div><!-- /.modal -->
   </div>
 </div>
 
-<div class = "modal fade " id = "myModal3" tabindex = "-1" role = "dialog" 
+<div class = "modal fade " id = "myModal3" tabindex = "-1" role = "dialog"
    aria-labelledby = "myModalLabel" aria-hidden = "true" >
-   
+
    <div class = "modal-dialog">
       <div class = "modal-content">
-         
+
          <div class = "modal-header">
             <button type = "button" class = "close" data-dismiss = "modal" aria-hidden = "true">
                   &times;
             </button>
-            
+
             <h4 class = "modal-title" id = "myModalLabel">
                Modificar paciente
             </h4>
          </div>
-        
+
          <div class = "modal-body">
             <form class="form-horizontal" method="POST" action="modificarpacientes">
              <input type="hidden" name="id_pac" id="id_pac">
@@ -399,7 +399,7 @@
       <input type="text" class="form-control" name="mci_pac" id="mci_pac"
              placeholder="Numero CI">
     </div>
-    
+
     <label for="ejemplo_password_3" class="col-lg-2 control-label">Expedido </label>
     <div class="col-lg-4">
       <select class="form-control" name="mexp_pac" id="mexp_pac">
@@ -416,7 +416,7 @@
     </div>
     </div>
 
-    <div class="form-group"> 
+    <div class="form-group">
      <label  class="col-lg-2 control-label">Nombre :</label>
     <div class="col-lg-10">
       <input type="text" name="mnom_pac" class="form-control" id="mnom_pac"
@@ -426,18 +426,18 @@
    <div class="form-group">
     <label for="ejemplo_password_3" class="col-lg-2 control-label">Paterno :</label>
     <div class="col-lg-4">
-      <input type="text" class="form-control" name="mapa_pac" id="mapa_pac" 
+      <input type="text" class="form-control" name="mapa_pac" id="mapa_pac"
              placeholder="Apellido paterno">
     </div>
-   
+
     <label  class="col-lg-2 control-label">Materno :</label>
     <div class="col-lg-4">
       <input type="text" class="form-control" name="mama_pac" id="mama_pac"
              placeholder="Apellido materno">
     </div>
     </div>
-    
-    
+
+
     <div class="form-group">
     <label  class="col-lg-2 control-label">Genero :</label>
     <div class="col-lg-4">
@@ -480,42 +480,42 @@
             <button type = "button" class = "btn btn-danger" data-dismiss = "modal"> <span class="fa fa-times"></span>
               Cancelar
             </button>
-            
+
             <button type = "submit" class = "btn btn-primary">
               <span class="fa fa-check"></span> Registrar
             </button>
             </form>
          </div>
-         
+
       </div><!-- /.modal-content -->
    </div><!-- /.modal-dialog -->
-  
+
 </div><!-- /.modal -->
-<div class = "modal fade " id = "myModal5" tabindex = "-1" role = "dialog" 
+<div class = "modal fade " id = "myModal5" tabindex = "-1" role = "dialog"
    aria-labelledby = "myModalLabel" aria-hidden = "true" >
-   
+
    <div class = "modal-dialog">
       <div class = "modal-content">
-         
+
          <div class = "modal-header">
             <button type = "button" class = "close" data-dismiss = "modal" aria-hidden = "true">
                   &times;
             </button>
-            
+
             <h4 class = "modal-title" id = "myModalLabel">
                Reasignar medico
             </h4>
          </div>
-        
+
          <div class = "modal-body">
-       
+
 <form action="{{ url('modificarticket') }}" method="post">
 <table class="table table-hover">
     <input type="hidden" name="id" id="IDS_PAC">
-  
+
   <tr class="">
     <td class="col-lg-2">Paciente: </td><td colspan="3"><input class="form-control col-lg-10" name="NOM_PAC" id="NOMB_PAC" type="text" readonly="readonly"></td>
-    
+
   </tr>
   <tr >
     <td class="col-lg-2">Especialidad: </td><td class="col-lg-4">
@@ -530,7 +530,7 @@
     <td id="cambios" class="col-lg-4">
     </td>
     <td><button type="button" class="btn btn-success" onclick="javascript:medicos2();"><span class="fa fa-refresh"></span></button></td>
-    
+
   </tr>
 
 </table>
@@ -543,44 +543,44 @@
             <button type = "button" class = "btn btn-danger" data-dismiss = "modal"> <span class="fa fa-times"></span>
               Cancelar
             </button>
-            
+
             <button type="submit" id="btnreg" class="btn btn-success" style="float:right"><span class="fa fa-stethoscope"> </span> Asignar Medico</button>
             </form>
          </div>
-         
+
       </div><!-- /.modal-content -->
    </div><!-- /.modal-dialog -->
-  
+
 </div><!-- /.modal -->
- 
-<div class = "modal fade " id = "myModal4" tabindex = "-1" role = "dialog" 
+
+<div class = "modal fade " id = "myModal4" tabindex = "-1" role = "dialog"
    aria-labelledby = "myModalLabel" aria-hidden = "true" >
-   
+
    <div class = "modal-dialog">
       <div class = "modal-content">
-         
+
          <div class = "modal-header">
             <button type = "button" class = "close" data-dismiss = "modal" aria-hidden = "true">
                   &times;
             </button>
-            
+
             <h4 class = "modal-title" id = "myModalLabel">
                Asignar medico
             </h4>
          </div>
-        
+
          <div class = "modal-body">
-       
+
 <form action="{{ url('registroticket') }}" method="post">
 <table class="table table-hover">
     <input type="hidden" name="id" id="ID_PAC">
-  <tr class=""> 
+  <tr class="">
     <td class="col-lg-2">CI: </td><td colspan="3"><input class="form-control col-lg-10" type="text" name="CI_PAC" id="CI_PAC" readonly="readonly"></td>
 
   </tr>
   <tr class="">
     <td class="col-lg-2">Paciente: </td><td colspan="3"><input class="form-control col-lg-10" name="NOM_PAC" id="NOM_PAC" type="text" readonly="readonly"></td>
-    
+
   </tr>
   <tr >
     <td class="col-lg-2">Especialidad: </td><td class="col-lg-4">
@@ -595,7 +595,7 @@
     <td id="cambio" class="col-lg-4">
     </td>
     <td><button type="button" class="btn btn-success" onclick="javascript:medicos();"><span class="fa fa-refresh"></span></button></td>
-    
+
   </tr>
 
 </table>
@@ -608,15 +608,15 @@
             <button type = "button" class = "btn btn-danger" data-dismiss = "modal"> <span class="fa fa-times"></span>
               Cancelar
             </button>
-            
+
             <button type="submit" id="btnreg" class="btn btn-success" style="float:right"><span class="fa fa-stethoscope"> </span> Asignar Medico</button>
             </form>
          </div>
-         
+
       </div><!-- /.modal-content -->
    </div><!-- /.modal-dialog -->
-  
+
 </div><!-- /.modal -->
- 
+
 
 @stop

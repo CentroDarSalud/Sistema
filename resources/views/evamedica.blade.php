@@ -18,15 +18,15 @@
 <script type="text/javascript">
 function limita(elEvento, maximoCaracteres) {
   var elemento = document.getElementById("texto");
- 
-  // Obtener la tecla pulsada 
+
+  // Obtener la tecla pulsada
   var evento = elEvento || window.event;
   var codigoCaracter = evento.charCode || evento.keyCode;
   // Permitir utilizar las teclas con flecha horizontal
   if(codigoCaracter == 37 || codigoCaracter == 39) {
     return true;
   }
- 
+
   // Permitir borrar con la tecla Backspace y con la tecla Supr.
   if(codigoCaracter == 8 || codigoCaracter == 46) {
     return true;
@@ -41,18 +41,18 @@ function limita(elEvento, maximoCaracteres) {
  </script>
 <script language="javascript">
   function datospac()
-  { var id= <?php echo $id?>;  
+  { var id= <?php echo $id?>;
 
     $.post("datospac", { id: id }, function(data){
-                $("#datospac").html(data); 
+                $("#datospac").html(data);
             });              }
   $(document).ready(function()
     {
         datospac();
-    });  
+    });
 $(document).ready(function(){
     var altura = '50';
-    
+
     $(window).on('scroll', function(){
         if ( $(window).scrollTop() > altura ){
             $('#menueva').css("top","2%");
@@ -62,12 +62,12 @@ $(document).ready(function(){
             $('#menueva2').css("top","8%");
         }
     });
- 
+
 });
 $(document).ready(function(){
     $('#apto').change(function ()
     {
-        $('#apto option:selected').each(function() 
+        $('#apto option:selected').each(function()
         {
             if($(this).val()==1){
             $('#catapto').css("display","block");
@@ -79,7 +79,7 @@ $(document).ready(function(){
             }
         });
     });
- 
+
 });
 </script>
  <script type="text/javascript">
@@ -99,38 +99,38 @@ $(document).ready(function(){
  <nav class="navbar navbar-inverse no-margin" style="border-radius: 0; background-color: #000;">
     <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header fixed-brand" >
-                    
+
                     <a class="navbar-brand" href="/Darsalud/public" style="color: #21D3F3; padding-left: 14%; font-size: 25px;"><span class="fa fa-medkit"></span> <b>DARSALUD</b></a>
                 </div><!-- navbar-header-->
- 
+
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                            
+
                 </div><!-- bs-example-navbar-collapse-1 -->
     </nav>
-   
+
         <!-- Sidebar -->
 
         <!-- Page Content -->
          <form class="form-horizontal" action="{{$ids}}/pdfmedi" method="post" target="_blank" accept-charset="UTF-8" name="fmedica" enctype="multipart/form-data">
-                    <div id="menueva2" style="position: fixed; background-color:#B0EBEF; opacity: 100%; top: 9%; height:61px; z-index: 99; width:100%; padding:1% 8% 0 8%; font-size: 20px; ">EVALUACION MEDICA</div> 
+                    <div id="menueva2" style="position: fixed; background-color:#B0EBEF; opacity: 100%; top: 9%; height:61px; z-index: 99; width:100%; padding:1% 8% 0 8%; font-size: 20px; ">EVALUACION MEDICA</div>
 <div class="container">
 <div  style="width:100%; background:#fff; margin-top:1%;">
     <div class="alert alert-info" style=" z-index: 1000;font-size:23px;">Evaluacion Medica <div id="menueva" style="right: 5%; top: 11%;  z-index: 100; position: fixed;"><button type="button" style="margin-left:-20%;" class="btn btn-success" onclick="javascript:datospac();"><span class="fa fa-refresh"></span></button><button class="btn" style="margin-left:1%; background-color: #279495; color:white" type="submit" name="guardar" formnovalidate><span class="fa fa-floppy-o"></span></button><a style="margin-left:1%;" href="../../<?php echo 'pacientes/'.$id;?>" class="btn btn-warning">Ver historial clinico</a> <button name="imprimir" type = "submit" target="_blank" class = "btn btn-primary" data-dismiss = "modal"><span class="fa fa-print"></span>
               Imprimir
             </button><a style="margin-left:1%;" href="<?php echo $ids;?>/finalizar" class="btn btn-danger">Finalizar</a></div></div>
     <div class="alert panel panel-success cuerpo" style="background:#fff; margin-top:-2.7%">
-       
+
             <fieldset style="background-color:#BEEABE; padding: 2%;">
                 <legend>
                      DATOS PERSONALES
                 </legend>
                 <div id="datospac">
-                
+
                 </div>
 
-  
+
     <div style="float:right; margin-right:0%; margin-top: -15%; height:50px;"><output id="list"></output></div>
-      <?php 
+      <?php
     if(isset($datos)):
      ?>
            <div class="form-group">
@@ -144,13 +144,13 @@ $(document).ready(function(){
                     </div>
 
                 </div>
-               <div class="form-group"> 
+               <div class="form-group">
                <label class="col-lg-2">Foto : </label>
                <div class="col-lg-8">
                 <input type="file" class="form-control" id="files" name="files" required>
                </div>
-    
-    
+
+
     </div>
             </fieldset>
             <fieldset style="background-color:#B9DEE3; padding: 2%;">
@@ -179,7 +179,7 @@ $(document).ready(function(){
   <label style="margin-right:10%;">
     <input type="radio" name="opciones" id="opciones_2" value="OCASIONALMENTE" <?php if($datos->HBE_MED=='OCASIONALMENTE'){
                       echo 'checked'; }?> >
-    OCASIONALMENTE 
+    OCASIONALMENTE
   </label>
     <label>
     <input type="radio" name="opciones" id="opciones_3" value="UNA O MAS A LA SEMANA" <?php if($datos->HBE_MED=='UNA O MAS A LA SEMANA'){
@@ -200,7 +200,7 @@ $(document).ready(function(){
   <label style="margin-right:10%;">
     <input type="radio" name="opciones2" id="opciones_2" value="OCASIONALMENTE" <?php if($datos->HFU_MED=='OCASIONALMENTE'){
                       echo 'checked'; }?>>
-    OCASIONALMENTE 
+    OCASIONALMENTE
   </label>
     <label>
     <input type="radio" name="opciones2" id="opciones_3" value="UNA O MAS A LA SEMANA" <?php if($datos->HFU_MED=='UNA O MAS A LA SEMANA'){
@@ -235,7 +235,7 @@ $(document).ready(function(){
   <label style="margin-right:10%;">
     <input type="radio" name="opciones4" id="opciones_2" value="NO" <?php if($datos->VTE_MED=='NO'){
                       echo 'checked'; }?>>
-    NO 
+    NO
   </label>
 </div>
             </fieldset>
@@ -263,14 +263,14 @@ $(document).ready(function(){
                       echo 'selected'; }?>>(+) POSITIVO</option>
                             <option value="RH (-) NEGATIVO" <?php if($datos->GSA_MED=='O RH (-) NEGATIVO'||$datos->GSA_MED=='A RH (-) NEGATIVO'||$datos->GSA_MED=='B RH (-) NEGATIVO'||$datos->GSA_MED=='AB RH (-) NEGATIVO'){
                       echo 'selected'; }?>>(-) NEGATIVO</option>
-                          
+
 
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-2">SIGNOS VITALES</label>
-                    
+
                     <label class="col-lg-2">TEMPERATURA</label>
                     <div class="col-lg-2">
                         <input type="number" step="0.01" name="tem_med" class="form-control" value="{{ $datos->TEM_MED}}" placeholder="°C">
@@ -292,7 +292,7 @@ $(document).ready(function(){
                 </div>
                 <div class="form-group">
                     <label class="col-lg-2">SOMATOMETRIA</label>
-                    
+
                     <label class="col-lg-1">TALLA</label>
                     <div class="col-lg-2">
                         <input type="number" name="tal_med" placeholder="cm" value="{{$datos->TAL_MED}}" required="yes" class="form-control">
@@ -351,10 +351,10 @@ $(document).ready(function(){
                     <label style="margin-right:10%;">
                     <input type="radio" name="opciones5" id="opciones_2" value="NO" <?php if($datos->ETR_MED=='NO'){
                       echo 'checked'; }?>>
-                    NO 
+                    NO
                     </label>
-                </div>  
-              
+                </div>
+
                 <div class="form-group">
                     <label class="col-lg-5">USA LENTES:</label>
                     <label style="text-align:left; margin-right:10%;">
@@ -365,9 +365,9 @@ $(document).ready(function(){
                     <label style="margin-right:10%;">
                     <input type="radio" name="opciones6" id="opciones_2" value="NO" <?php if($datos->LEN_MED=='NO'){
                       echo 'checked'; }?>>
-                    NO 
+                    NO
                     </label>
-                </div>   
+                </div>
                 <div class="form-group">
                     <label class="col-lg-4">Campimetría</label>
                     <div class="col-lg-6">
@@ -408,7 +408,7 @@ $(document).ready(function(){
                                 <td><input type="text" name="asi_med" value="{{$datos->ASI_MED}}"></td>
                                 <td><input type="text" name="aci_med" value="{{$datos->ACI_MED}}"></td>
                             </tr>
-                        </table>        
+                        </table>
                     </div>
                     </div>
                 </fieldset>
@@ -457,7 +457,7 @@ $(document).ready(function(){
                     <div class="col-lg-9">
                         <input type="text" name="exa_med" placeholder="" class="form-control" value="{{$datos->EXA_MED}}">
                     </div>
-                    </div>   
+                    </div>
                     <label class="col-lg-9">4. EXPLORACION DEL APARATO LOCOMOTOR</label>
                     <br/><br/>
                     <label class="col-lg-9">MIEMBROS SUPERIORES</label>
@@ -475,13 +475,13 @@ $(document).ready(function(){
                     <div class="col-lg-3">
                         <input type="text" name="fms_med" placeholder="" class="form-control" value="{{$datos->FMS_MED}}">
                     </div>
-                    </div>  
+                    </div>
                     <div class="form-group">
                     <label class="col-lg-1">Otros: </label>
                     <div class="col-lg-9">
                         <input type="text" name="obs_med" placeholder="OBSERVACIONES" class="form-control" value="{{$datos->OBS_MED}}">
                     </div>
-                    </div> 
+                    </div>
                     <label class="col-lg-9">MIEMBROS INFERIORES</label>
                     <br/><br/>
                     <div class="form-group">
@@ -497,13 +497,13 @@ $(document).ready(function(){
                     <div class="col-lg-3">
                         <input type="text" name="fmi_med" placeholder="" class="form-control" value="{{$datos->FMI_MED}}">
                     </div>
-                    </div> 
+                    </div>
                     <div class="form-group">
                     <label class="col-lg-1">Otros: </label>
                     <div class="col-lg-9">
                         <input type="text" name="obi_med" placeholder="OBSERVACIONES" class="form-control" value="{{$datos->OBI_MED}}">
                     </div>
-                    </div>   
+                    </div>
                     <label class="col-lg-11">5. SISTEMA NEUROLOGICO</label>
                     <br/><br/>
                     <div class="form-group">
@@ -545,7 +545,7 @@ $(document).ready(function(){
                      <label class="col-lg-9">RESULTADOS DE EVALUACION</label>
                     <br/><br/>
                     <div class="form-group">
-                    <div class="col-lg-6"><label class="col-lg-5">Requiere de evaluacion de especialidad: </label>    
+                    <div class="col-lg-6"><label class="col-lg-5">Requiere de evaluacion de especialidad: </label>
                     <label style="text-align:left; margin-right:10%;">
                     <input type="radio" name="opciones7" id="opciones_11" value="SI" <?php if($datos->REE_MED=='SI'){
                       echo 'checked'; }?>>
@@ -554,11 +554,11 @@ $(document).ready(function(){
                     <label style="margin-right:10%;">
                     <input type="radio" name="opciones7" id="opciones_21" value="NO" <?php if($datos->REE_MED=='NO'){
                       echo 'checked'; }?>>
-                    NO 
+                    NO
                     </label>
                     </div>
                     <div class="col-lg-5">
-                    <label class="col-lg-11">Especialidades (en caso de marcar como si): </label>  
+                    <label class="col-lg-11">Especialidades (en caso de marcar como si): </label>
                     <input type="text" class="form-control" name="esp_med" value="{{$datos->ESP_MED}}">
                     </div>
                     </div>
@@ -572,7 +572,7 @@ $(document).ready(function(){
                     <div class="col-lg-8">
                         <textarea name="mre_med" placeholder="" class="form-control" value="">{{$datos->MRE_MED}}</textarea>
                     </div>
-                    </div>  
+                    </div>
                     <div class="form-group">
                     <label class="col-lg-4">Resultado de la evaluacion de especialidad </label>
                     <div class="col-lg-8">
@@ -580,7 +580,7 @@ $(document).ready(function(){
                     </div>
                     </div>
                     <div class="form-group">
-                    <label class="col-lg-5">Requiere de evaluacion psicosensometríca: </label>    
+                    <label class="col-lg-5">Requiere de evaluacion psicosensometríca: </label>
                     <label style="text-align:left; margin-right:10%;">
                     <input type="radio" name="opciones8" id="opciones_1" value="SI" <?php if($datos->REP_MED=='SI'){
                       echo 'checked'; }?> >
@@ -589,9 +589,9 @@ $(document).ready(function(){
                     <label style="margin-right:10%;">
                     <input type="radio" name="opciones8" id="opciones_2" value="NO" <?php if($datos->REP_MED=='NO'){
                       echo 'checked'; }?>>
-                    NO 
+                    NO
                     </label>
-                    </div>  
+                    </div>
                 </fieldset>
                  <br/><br/>
 <fieldset style="background-color:#E3CFD3; padding: 2%;">
@@ -608,7 +608,7 @@ $(document).ready(function(){
             </select>
             </div>
         <div style="display: none;" id="catapto" name="rfi_med">
-        <div class="col-lg-1"> 
+        <div class="col-lg-1">
             <select class="form-control" name="rfi_med" >
             <option value="A" <?php if($datos->RFI_MED=='A'){
                       echo 'selected'; }?> >A</option>
@@ -665,7 +665,7 @@ $(document).ready(function(){
             <textarea cols="70" rows="4" name="mna_med">{{$datos->MNA_MED}}</textarea>
         </div>
     </div>
-</fieldset>   
+</fieldset>
 
 
     <?php else: ?>
@@ -680,13 +680,13 @@ $(document).ready(function(){
             </div>
 
                 </div>
-               <div class="form-group"> 
+               <div class="form-group">
                <label class="col-lg-2">Foto : </label>
                <div class="col-lg-8">
                 <input type="file" class="form-control" id="files" name="files" required>
                </div>
-    
-    
+
+
     </div>
             </fieldset>
             <fieldset style="background-color:#B9DEE3; padding: 2%;">
@@ -713,7 +713,7 @@ $(document).ready(function(){
   </label>
   <label style="margin-right:10%;">
     <input type="radio" name="opciones" id="opciones_2" value="OCASIONALMENTE" checked >
-    OCASIONALMENTE 
+    OCASIONALMENTE
   </label>
     <label>
     <input type="radio" name="opciones" id="opciones_3" value="UNA O MAS A LA SEMANA">
@@ -731,7 +731,7 @@ $(document).ready(function(){
   </label>
   <label style="margin-right:10%;">
     <input type="radio" name="opciones2" id="opciones_2" value="OCASIONALMENTE" >
-    OCASIONALMENTE 
+    OCASIONALMENTE
   </label>
     <label>
     <input type="radio" name="opciones2" id="opciones_3" value="UNA O MAS A LA SEMANA">
@@ -761,7 +761,7 @@ $(document).ready(function(){
   </label>
   <label style="margin-right:10%;">
     <input type="radio" name="opciones4" id="opciones_2" value="NO" >
-    NO 
+    NO
   </label>
 </div>
             </fieldset>
@@ -783,14 +783,14 @@ $(document).ready(function(){
                         <select class="form-control" name="rh_med">
                             <option value="RH (+) POSITIVO">(+) POSITIVO</option>
                             <option value="RH (-) NEGATIVO">(-) NEGATIVO</option>
-                          
+
 
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-2">SIGNOS VITALES</label>
-                    
+
                     <label class="col-lg-2">TEMPERATURA</label>
                     <div class="col-lg-2">
                         <input type="number" step="0.01" name="tem_med" class="form-control" value="36.5" placeholder="°C">
@@ -812,7 +812,7 @@ $(document).ready(function(){
                 </div>
                 <div class="form-group">
                     <label class="col-lg-2">SOMATOMETRIA</label>
-                    
+
                     <label class="col-lg-1">TALLA</label>
                     <div class="col-lg-2">
                         <input type="number" name="tal_med" placeholder="cm" required="yes" class="form-control">
@@ -869,10 +869,10 @@ $(document).ready(function(){
                     </label>
                     <label style="margin-right:10%;">
                     <input type="radio" name="opciones5" id="opciones_2" value="NO" checked>
-                    NO 
+                    NO
                     </label>
-                </div>  
-              
+                </div>
+
                 <div class="form-group">
                     <label class="col-lg-5">USA LENTES:</label>
                     <label style="text-align:left; margin-right:10%;">
@@ -881,9 +881,9 @@ $(document).ready(function(){
                     </label>
                     <label style="margin-right:10%;">
                     <input type="radio" name="opciones6" id="opciones_2" value="NO" checked>
-                    NO 
+                    NO
                     </label>
-                </div>   
+                </div>
                 <div class="form-group">
                     <label class="col-lg-4">Campimetría</label>
                     <div class="col-lg-6">
@@ -924,7 +924,7 @@ $(document).ready(function(){
                                 <td><input type="text" name="asi_med" value="20/25"></td>
                                 <td><input type="text" name="aci_med"></td>
                             </tr>
-                        </table>        
+                        </table>
                     </div>
                     </div>
                 </fieldset>
@@ -973,7 +973,7 @@ $(document).ready(function(){
                     <div class="col-lg-9">
                         <input type="text" name="exa_med" placeholder="" class="form-control" value="BLANDO, NO DOLOROSO, RHA +">
                     </div>
-                    </div>   
+                    </div>
                     <label class="col-lg-9">4. EXPLORACION DEL APARATO LOCOMOTOR</label>
                     <br/><br/>
                     <label class="col-lg-9">MIEMBROS SUPERIORES</label>
@@ -991,13 +991,13 @@ $(document).ready(function(){
                     <div class="col-lg-3">
                         <input type="text" name="fms_med" placeholder="" class="form-control" value="5/5">
                     </div>
-                    </div>  
+                    </div>
                     <div class="form-group">
                     <label class="col-lg-1">Otros: </label>
                     <div class="col-lg-9">
                         <input type="text" name="obs_med" placeholder="OBSERVACIONES" class="form-control" value="">
                     </div>
-                    </div> 
+                    </div>
                     <label class="col-lg-9">MIEMBROS INFERIORES</label>
                     <br/><br/>
                     <div class="form-group">
@@ -1013,13 +1013,13 @@ $(document).ready(function(){
                     <div class="col-lg-3">
                         <input type="text" name="fmi_med" placeholder="" class="form-control" value="5/5">
                     </div>
-                    </div> 
+                    </div>
                     <div class="form-group">
                     <label class="col-lg-1">Otros: </label>
                     <div class="col-lg-9">
                         <input type="text" name="obi_med" placeholder="OBSERVACIONES" class="form-control" value="">
                     </div>
-                    </div>   
+                    </div>
                     <label class="col-lg-11">5. SISTEMA NEUROLOGICO</label>
                     <br/><br/>
                     <div class="form-group">
@@ -1061,18 +1061,18 @@ $(document).ready(function(){
                      <label class="col-lg-9">RESULTADOS DE EVALUACION</label>
                     <br/><br/>
                     <div class="form-group">
-                    <div class="col-lg-6"><label class="col-lg-5">Requiere de evaluacion de especialidad: </label>    
+                    <div class="col-lg-6"><label class="col-lg-5">Requiere de evaluacion de especialidad: </label>
                     <label style="text-align:left; margin-right:10%;">
                     <input type="radio" name="opciones7" id="opciones_11" value="SI">
                     SI
                     </label>
                     <label style="margin-right:10%;">
-                    <input type="radio" name="opciones7" id="opciones_21" value="NO" >
-                    NO 
+                    <input type="radio" name="opciones7" id="opciones_21" value="NO" checked >
+                    NO
                     </label>
                     </div>
                     <div class="col-lg-5">
-                    <label class="col-lg-11">Especialidades (en caso de marcar como si): </label>  
+                    <label class="col-lg-11">Especialidades (en caso de marcar como si): </label>
                     <input type="text" class="form-control" name="esp_med">
                     </div>
                     </div>
@@ -1086,7 +1086,7 @@ $(document).ready(function(){
                     <div class="col-lg-8">
                         <textarea name="mre_med" placeholder="" class="form-control" value=""></textarea>
                     </div>
-                    </div>  
+                    </div>
                     <div class="form-group">
                     <label class="col-lg-4">Resultado de la evaluacion de especialidad </label>
                     <div class="col-lg-8">
@@ -1094,16 +1094,16 @@ $(document).ready(function(){
                     </div>
                     </div>
                     <div class="form-group">
-                    <label class="col-lg-5">Requiere de evaluacion psicosensometríca: </label>    
+                    <label class="col-lg-5">Requiere de evaluacion psicosensometríca: </label>
                     <label style="text-align:left; margin-right:10%;">
                     <input type="radio" name="opciones8" id="opciones_1" value="SI" >
                     SI
                     </label>
                     <label style="margin-right:10%;">
                     <input type="radio" name="opciones8" id="opciones_2" value="NO" checked>
-                    NO 
+                    NO
                     </label>
-                    </div>  
+                    </div>
                 </fieldset>
                  <br/><br/>
 <fieldset style="background-color:#E3CFD3; padding: 2%;">
@@ -1118,7 +1118,7 @@ $(document).ready(function(){
             </select>
             </div>
         <div style="display: none;" id="catapto" name="rfi_med">
-        <div class="col-lg-1"> 
+        <div class="col-lg-1">
             <select class="form-control" name="rfi_med" >
             <option value="A">A</option>
             <option value="B">B</option>
@@ -1157,43 +1157,43 @@ $(document).ready(function(){
             <textarea cols="70" rows="4" name="mna_med"></textarea>
         </div>
     </div>
-</fieldset>   
+</fieldset>
 <?php endif;?>
-        </form>          
+        </form>
 
                     </div>
                 </div>
             </div>
         </div>
         <!-- /#page-content-wrapper -->
-    
+
 
 	{!! Html::script('assets/js/sidebar2.js')!!}
      <script>
 
               function archivo(evt) {
                   var files = evt.target.files; // FileList object
-             
+
                   // Obtenemos la imagen del campo "file".
                   for (var i = 0, f; f = files[i]; i++) {
                     //Solo admitimos imágenes.
                     if (!f.type.match('image.*')) {
                         continue;
                     }
-             
+
                     var reader = new FileReader();
-             
+
                     reader.onload = (function(theFile) {
                         return function(e) {
                           // Insertamos la imagen
                          document.getElementById("list").innerHTML = ['<img class="thumb" width=150px; height=150px; src="', e.target.result,'" title="', escape(theFile.name), '"/>'].join('');
                         };
                     })(f);
-             
+
                     reader.readAsDataURL(f);
                   }
               }
-             
+
               document.getElementById('files').addEventListener('change', archivo, false);
       </script>
 </body>

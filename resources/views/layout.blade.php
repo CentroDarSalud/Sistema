@@ -20,52 +20,52 @@
  var ind=1;
  var ind2=1;
 $(function(){
-    
+
     // Clona la fila oculta que tiene los campos base, y la agrega al final de la tabla
     $("#agregar").on('click', function(){
-        
+
         if(ind<=1){
             ind=2;
         }else
         {
             ind2++;
             $("#tabla tbody tr:eq(0)").clone().prependTo("#tabla tbody");
-            
+
         }
     });
- 
-    // Evento que selecciona la fila y la elimina 
-          
+
+    // Evento que selecciona la fila y la elimina
+
     $(document).on("click",".eliminar",function(){
         if(ind2==1){
             ind--;
-            
+
             $('#producto').val(' ');
             $('#producto2').val(' ');
             $('#pre_pro').val(' ');
             $('#sub_pro').val(' ');
             $('#can_pro').val(' ');
             $('#total').val('0');
-            
+
         }else{
         var parent = $(this).parents().get(0);
         $(parent).remove();
         ind2--;
-        
+
         }
     });
- 
+
     $(document).on("click",".eliminar2",function(){
         if(ind2==1){
             ind--;
-    
+
             $('#producto').val(' ');
             $('#producto2').val(' ');
             $('#pre_pro').val(' ');
             $('#sub_pro').val(' ');
             $('#can_pro').val(' ');
             $('#total').val('0');
-            
+
         }else{
   document.getElementById("tabla").deleteRow(1);
         ind2--;
@@ -82,28 +82,29 @@ $(function(){
                     <button type="button"  class="navbar-toggle collapsed" data-toggle="collapse"  id="menu-toggle">
                       <span  class="glyphicon glyphicon-th-large" aria-hidden="true" style="color: #fff;"></span>
                     </button>
-                    <a class="navbar-brand" href="/Darsalud/public" style="color: #21D3F3; padding-left: 14%; font-size: 25px;"><span class="fa fa-medkit"></span> <b>DARSALUD</b></a>
+                    <a class="navbar-brand" href="{{ url('/') }}" style="color: #21D3F3; padding-left: 14%; font-size: 25px;"><span class="fa fa-medkit"></span> <b>DARSALUD</b></a>
                 </div><!-- navbar-header-->
- 
+
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                             <ul class="nav navbar-nav">
                                 <li class="active" ><button class="navbar-toggle collapse in" data-toggle="collapse" id="menu-toggle-2"> <span class="fa fa-reorder" aria-hidden="true" style="color: #fff;"></span></button></li>
                             </ul>
+                              <a class="btn btn-danger" style="float:right; margin-top:1%;" href="{{ url('logout') }}">CERRAR SESION</a>
                 </div><!-- bs-example-navbar-collapse-1 -->
     </nav>
     <div id="wrapper">
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav nav-pills nav-stacked" id="menu">
- 
+
                 <li class="active" style="height:auto;">
                     <a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-user fa-stack-1x" style="font-size:50px; margin-top:50%; margin-left: -25%; "></i></span><b style="margin-left:10%;"> Usuario - {{Auth::user()->NOM_USU}} </b><br/><span class="fa fa-circle" style="color:#00FF06; font-size:10px; margin-left:23%;"> </span> Activo<span class="fa fa-sort-desc"></span></a>
                        <ul class="nav-pills nav-stacked" style="list-style-type:none;">
                         <li><a href="#">Ver perfil</a></li>
-                        <li><a href="logout">Cerrar sesion</a></li>
+                        <li><a href="{{ url('logout') }}">Cerrar sesion</a></li>
                     </ul>
                 </li>
-                
+
                 <li style="background-color:#333;">
                     <a href="#" style="pointer-events: none;"><span class="fa-stack fa-lg pull-left"><i class="fa fa-menu fa-stack-1x "></i></span>Menu</a>
                 </li>
@@ -113,7 +114,7 @@ $(function(){
                         <li><a href="{{ url('pacientessegip') }}"><span class="fa-stack fa-lg pull-left"><i class="fa fa-keyboard-o fa-stack-1x "></i></span>Registro SEGIP</a></li>
                         <li><a href="{{ url('pacientesdarsalud') }}"><span class="fa-stack fa-lg pull-left"><i class="fa fa-keyboard-o fa-stack-1x "></i></span>Registro DAR SALUD</a></li>
                         <li><a href="{{ url('facturacion') }}"><span class="fa-stack fa-lg pull-left"><i class="fa fa-barcode fa-stack-1x "></i></span>Facturacion</a></li>
- 
+
                     </ul>
                 </li>
                 <li>
