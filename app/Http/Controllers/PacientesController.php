@@ -256,6 +256,18 @@ echo '<div style=" width:25%; height:auto;float:left; padding: 2%; margin-left:1
         $mensaje='Medico asignado a paciente';
         return redirect()->route('pacientessegip')->with('mensaje',$mensaje);
     }
+    public function ticket2(Request $request)
+    {
+        $ticket= new Ticket;
+        $ticket->EST_TIC=0;
+        $ticket->ID_PAC= $request->input('id');
+        $ticket->ID_MED= $request->input('id_med');
+        $ticket->EVA_TIC=$request->input('eva_tic');
+        $ticket->IMP_TIC=0;
+        $ticket->save();
+        $mensaje='Medico asignado a paciente';
+        return redirect()->route('pacientesdarsalud')->with('mensaje',$mensaje);
+    }
     public function mticket(Request $request)
     {
         $id= $request->input('id');
@@ -267,6 +279,18 @@ echo '<div style=" width:25%; height:auto;float:left; padding: 2%; margin-left:1
         $ticket->save();
         $mensaje='Reasignacion realizada correctamente';
         return redirect()->route('pacientessegip')->with('mensaje',$mensaje);
+    }
+    public function mticket2(Request $request)
+    {
+        $id= $request->input('id');
+        $ticket= Ticket::find($id);
+        $ticket->EST_TIC=0;
+        $ticket->ID_MED= $request->input('id_med');
+        $ticket->EVA_TIC=$request->input('eva_tic');
+        $ticket->IMP_TIC=0;
+        $ticket->save();
+        $mensaje='Reasignacion realizada correctamente';
+        return redirect()->route('pacientesdarsalud')->with('mensaje',$mensaje);
     }
     public function reservaticket(Request $request)
     {
@@ -397,9 +421,21 @@ echo '<div style=" width:25%; height:auto;float:left; padding: 2%; margin-left:1
     public function psicologica($id, $ids)
     {   $paciente= Paciente::find($id);
         $tickets= Ticket::find($ids);
+        $iddatos= EvaPsico::where('ID_TIC','=',$ids)->select('id')->first();
+
+        if($iddatos){
+        $idmed = $iddatos->id;
+        $datos= EvaPsico::find($idmed);
+
         $tickets->EST_TIC=1;
         $tickets->save();
-        return view('evapsico')->with('paciente',$paciente)->with('id',$id)->with('ids',$ids);
+        return view('evapsico')->with('paciente',$paciente)->with('id',$id)->with('ids',$ids)->with('datos',$datos);
+        }else{
+          $tickets->EST_TIC=1;
+          $tickets->save();
+          return view('evapsico')->with('paciente',$paciente)->with('id',$id)->with('ids',$ids);
+
+        }
     }
 
 
@@ -470,6 +506,65 @@ echo '<div style=" width:25%; height:auto;float:left; padding: 2%; margin-left:1
         $html3='</select>';
         echo $html.$html2.$html3;
     }
+    public function datospac2()
+    { $id= $_POST['id'];
+      $paciente=Paciente::find($id);
+      $html= '<div class="form-group">
+          <label class="col-lg-2">Apellido paterno: </label>
+          <div class="col-lg-3">
+              <input type="text" class="form-control" name="" readonly="readonly" value=" '.$paciente->APA_PAC.'">
+          </div>
+          <label class="col-lg-2">Apellido materno: </label>
+          <div class="col-lg-3">
+              <input type="text" class="form-control" readonly="readonly" name="" value="'.$paciente->AMA_PAC.'">
+          </div>
+
+      </div>
+      <div class="form-group">
+          <label class="col-lg-2">Nombres: </label>
+          <div class="col-lg-3">
+              <input type="text" readonly="readonly" class="form-control" name="" value=" '.$paciente->NOM_PAC.'">
+          </div>
+          <label class="col-lg-2">CI: </label>
+          <div class="col-lg-3">
+              <input type="text" class="form-control" readonly="readonly" name="" value=" '.$paciente->CI_PAC.'">
+          </div>
+      </div>
+      <div class="form-group">
+
+          <label class="col-lg-2">Fecha de nacimiento: </label>
+          <div class="col-lg-3">
+              <input type="text" readonly="readonly" class="form-control" name="" value=" '.$paciente->FEC_NAC.'">
+          </div>                                   <label class="col-lg-2">Edad: </label>
+          <div class="col-lg-3">
+              <input type="text" readonly="readonly" class="form-control" name="" value="';
+      $edad = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente->FEC_NAC)->format('Y');
+      $edad2 = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente->FEC_NAC)->format('m');
+      $edad3 = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente->FEC_NAC)->format('d');
+
+      $date = \Carbon\Carbon::createFromDate($edad,$edad2,$edad3)->age;
+       $html=$html.$date.'">
+                    </div>
+                </div>              <div class="form-group">
+                                  <label class="col-lg-2">Profesion : </label>
+                                  <div class="col-lg-3">
+                                      <input type="text" class="form-control" name="" readonly="readonly" value=" '.$paciente->PRO_PAC.'">
+                                  </div>
+                                  <label class="col-lg-2">Fecha del examen : </label>
+                                  <div class="col-lg-3">
+                                      <input type="text" class="form-control" readonly="readonly" name="" value="'. \Carbon\Carbon::now()->format('d-m-Y').'">
+                                  </div>
+
+                              </div>
+                              <div class="form-group">
+                                  <label class="col-lg-2">Direccion : </label>
+                                  <div class="col-lg-9">
+                                      <input type="text" class="form-control" name="" readonly="readonly" value=" '.$paciente->DOM_PAC.'">
+                                  </div>
+                              </div>';
+        echo $html;
+    }
+
     public function datospac()
     { $id= $_POST['id'];
       $paciente=Paciente::find($id);

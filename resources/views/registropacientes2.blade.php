@@ -204,7 +204,7 @@
               <td class="col-lg-2">Especialidad: </td><td class="col-lg-4">
                 <select class="form-control" name="eva_tic" required>
                   <option value="">SELECCIONE</option>
-                  <?php foreach($especialidades as $especialidad):?>
+                  <?php foreach($especialidades2 as $especialidad):?>
                   <option value="{{$especialidad->NOM_ESP}}" >{{ $especialidad->NOM_ESP }}</option>
                   <?php endforeach;?>
     </select></td>
@@ -509,7 +509,7 @@
 
          <div class = "modal-body">
 
-<form action="{{ url('modificarticket') }}" method="post">
+<form action="{{ url('modificarticket2') }}" method="post">
 <table class="table table-hover">
     <input type="hidden" name="id" id="IDS_PAC">
 
@@ -571,7 +571,7 @@
 
          <div class = "modal-body">
 
-<form action="{{ url('registroticket') }}" method="post">
+<form action="{{ url('registroticket2') }}" method="post">
 <table class="table table-hover">
     <input type="hidden" name="id" id="ID_PAC">
   <tr class="">

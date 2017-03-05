@@ -52,7 +52,38 @@ class EvaluacionesController extends Controller
     }
 
     public function pdfpsico(Request $request,$id,$ids)
-    {   $ticket=Ticket::find($ids);
+    {
+      $ticket=Ticket::find($ids);
+      if(isset($_POST['guardar'])){
+      $ticket=Ticket::find($ids);
+      $comprueba= EvaPsico::where('ID_TIC','=',$ids)->first();
+    
+
+      if($comprueba){
+      $idmed=$comprueba->id;
+      $psicologia= EvaPsico::find($idmed);
+      }else{
+      $psicologia= new EvaPsico;
+      }
+      $psicologia->FEC_PSI= Carbon::now();
+      $psicologia->LUG_NAC= $request->input('lug_nac');
+      $psicologia->HIS_PSI= $request->input('his_psi');
+      $psicologia->EX1_PSI= $request->input('opciones');
+      $psicologia->EX2_PSI= $request->input('opciones1');
+      $psicologia->EX3_PSI= $request->input('opciones2');
+      $psicologia->EX4_PSI= $request->input('opciones3');
+      $psicologia->RFI_PSI= $request->input('rfi_psi');
+      $psicologia->ID_MED= Auth::user()->id;
+      $psicologia->ID_PAC= $id;
+      $psicologia->ID_TIC= $ids;
+      $psicologia->save();
+      $ticket->EST_TIC=4;
+      $ticket->IMP_TIC=1;
+      $ticket->save();
+      $mensaje="El paciente fue marcado como pendiente";
+      $reservas= Reserva::join('ticket','ticket.id','=','ID_TIC')->join('pacientes','pacientes.id','=','ticket.ID_PAC')->join('users','users.id','=','ticket.ID_MED')->where('EST_TIC','!=',2)->where('ID_MED','=',Auth::user()->id)->get();
+     return redirect()->route('/')->with('reservas',$reservas)->with('mensaje2',$mensaje);
+   }
         if($ticket->IMP_TIC==0)
         {
         $psicologia= new EvaPsico;
@@ -66,6 +97,7 @@ class EvaluacionesController extends Controller
         $psicologia->RFI_PSI= $request->input('rfi_psi');
         $psicologia->ID_MED= Auth::user()->id;
         $psicologia->ID_PAC= $id;
+        $psicologia->ID_TIC= $ids;
         $psicologia->save();
         $ticket->IMP_TIC=1;
         $ticket->save();
@@ -84,21 +116,22 @@ class EvaluacionesController extends Controller
         $psicologia->RFI_PSI= $request->input('rfi_psi');
         $psicologia->ID_MED= Auth::user()->id;
         $psicologia->ID_PAC= $id;
+        $psicologia->ID_TIC= $ids;
         $psicologia->save();
         }
         $pdf = new TCPDF('P','mm','LETTER', true, 'UTF-8', false);
-        $pdf->SetTitle('EVALUACION PSICOLOGICA');  
+        $pdf->SetTitle('EVALUACION PSICOLOGICA');
         $pdf->setPrintHeader(false);
         $pdf->setPrintFooter(false);
         $pdf->SetAutoPageBreak(TRUE, 10);
         $pdf->SetMargins(15, 15, 10);
         $pdf->AddPage();
-        
-        
+
+
         $pdf->SetFont('','B','9');
         $pdf->SetXY(15, 35);
         $pdf->Write(0,'A) DATOS PERSONALES','','',false);
-        
+
         $pdf->Line ( 15, 55,55,55,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
         $pdf->Line ( 65, 55,105,55,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
         $pdf->Line ( 115, 55,155,55,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
@@ -130,7 +163,7 @@ class EvaluacionesController extends Controller
         $pdf->Write(0,$request->input('lug_nac').' '.$paciente[0]->FEC_NAC,'','',false);
         $pdf->SetXY(80, 70);
         $pdf->SetFont('','','11');
-        $edad = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente[0]->FEC_NAC)->format('Y'); 
+        $edad = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente[0]->FEC_NAC)->format('Y');
         $edad2 = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente[0]->FEC_NAC)->format('m');
         $edad3 = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente[0]->FEC_NAC)->format('d');
         $date = \Carbon\Carbon::createFromDate($edad,$edad2,$edad3)->age;
@@ -150,7 +183,7 @@ class EvaluacionesController extends Controller
         $pdf->SetXY(18, 110);
         $pdf->SetFont('','','10');
         $pdf->Write(0,$request->input('his_psi'),'','',false);
-        
+
 
         $pdf->Line ( 15, 75,70,75,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
         $pdf->Line ( 75, 75,95,75,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
@@ -163,7 +196,7 @@ class EvaluacionesController extends Controller
         $pdf->Write(0,'EDAD','','',false);
         $pdf->SetXY(120, 78);
         $pdf->Write(0,'PROFESION','','',false);
-        $pdf->SetXY(165, 78);   
+        $pdf->SetXY(165, 78);
         $pdf->Write(0,'FECHA DEL EXAMEN','','',false);
         $pdf->Line ( 16, 95,205,95,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
         $pdf->SetXY(95, 98);
@@ -201,70 +234,70 @@ class EvaluacionesController extends Controller
         $pdf->SetXY(18, 50);
         $pdf->SetFont('','','11');
         if($request->input('opciones')=='ADECUADO'){
-            
+
             $pdf->SetXY(42, 157);
             $pdf->SetFont('','','11');
             $pdf->Write(0,'X','','',false);
         }
-        if($request->input('opciones')=='INADECUADO'){   
+        if($request->input('opciones')=='INADECUADO'){
             $pdf->SetXY(84, 157);
             $pdf->SetFont('','','11');
             $pdf->Write(0,'X','','',false);
         }
-        if($request->input('opciones')=='OBSERVACION'){   
+        if($request->input('opciones')=='OBSERVACION'){
             $pdf->SetXY(127, 157);
             $pdf->SetFont('','','11');
             $pdf->Write(0,'X','','',false);
         }
         if($request->input('opciones1')=='ADECUADO'){
-            
+
             $pdf->SetXY(42, 172);
             $pdf->SetFont('','','11');
             $pdf->Write(0,'X','','',false);
         }
-        if($request->input('opciones1')=='INADECUADO'){   
+        if($request->input('opciones1')=='INADECUADO'){
             $pdf->SetXY(84, 172);
             $pdf->SetFont('','','11');
             $pdf->Write(0,'X','','',false);
         }
-        if($request->input('opciones1')=='OBSERVACION'){   
+        if($request->input('opciones1')=='OBSERVACION'){
             $pdf->SetXY(127, 172);
             $pdf->SetFont('','','11');
             $pdf->Write(0,'X','','',false);
         }
         if($request->input('opciones2')=='ADECUADO'){
-            
+
             $pdf->SetXY(42, 187);
             $pdf->SetFont('','','11');
             $pdf->Write(0,'X','','',false);
         }
-        if($request->input('opciones2')=='INADECUADO'){   
+        if($request->input('opciones2')=='INADECUADO'){
             $pdf->SetXY(84, 187);
             $pdf->SetFont('','','11');
             $pdf->Write(0,'X','','',false);
         }
-        if($request->input('opciones2')=='OBSERVACION'){   
+        if($request->input('opciones2')=='OBSERVACION'){
             $pdf->SetXY(127, 187);
             $pdf->SetFont('','','11');
             $pdf->Write(0,'X','','',false);
         }
         if($request->input('opciones3')=='OPTIMO'){
-            
+
             $pdf->SetXY(42, 202);
             $pdf->SetFont('','','11');
             $pdf->Write(0,'X','','',false);
         }
-        if($request->input('opciones3')=='MEDIO'){   
+        if($request->input('opciones3')=='MEDIO'){
             $pdf->SetXY(84, 202);
             $pdf->SetFont('','','11');
             $pdf->Write(0,'X','','',false);
         }
-        if($request->input('opciones3')=='INADECUADO'){   
+        if($request->input('opciones3')=='INADECUADO'){
             $pdf->SetXY(127, 202);
             $pdf->SetFont('','','11');
             $pdf->Write(0,'X','','',false);
         }
-        if($request->input('opciones3')=='OBSERVACION'){   
+        if($request->input('opciones3')=='OBSERVACION'){
             $pdf->SetXY(167, 202);
             $pdf->SetFont('','','11');
             $pdf->Write(0,'X','','',false);
@@ -282,7 +315,7 @@ class EvaluacionesController extends Controller
         $pdf->Write(0,'INADECUADO','','',false);
         $pdf->SetXY(102, 188);
         $pdf->Write(0,'OBSERVACION','','',false);
-        
+
         $pdf->Rect ( 40,185,8,8,'','', '');
         $pdf->Rect ( 82,185,8,8,'','', '');
         $pdf->Rect ( 125,185,8,8,'','', '');
@@ -295,7 +328,7 @@ class EvaluacionesController extends Controller
         $pdf->Write(0,'INADECUADO','','',false);
          $pdf->SetXY(142, 203);
         $pdf->Write(0,'OBSERVACION','','',false);
-        
+
         $pdf->Rect ( 40,200,8,8,'','', '');
         $pdf->Rect ( 82,200,8,8,'','', '');
         $pdf->Rect ( 125,200,8,8,'','', '');
@@ -308,7 +341,7 @@ class EvaluacionesController extends Controller
         $pdf->Write(0,'OBSERVACIONES: (EN ESTE ACAPITE INCORPORAR SI EL POSTULANTE ES APTO PARA CONDUCIR VEHICULO, SI NO FUERA APTO INDICAR LOS MOTIVOS)','','',false);
         $pdf->SetXY(30, 229);
         $pdf->SetFont('','BS','9');
-        
+
         $pdf->MultiCell(148, 4, $request->input('rfi_psi') , 0, 'L', 0, 0, '', '', true);
         $pdf->Line ( 30, 263,70,263,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
         $pdf->Line ( 80, 263,120,263,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
@@ -392,18 +425,18 @@ class EvaluacionesController extends Controller
        }
         $medio=array('140','215.9');
         $pdf = new TCPDF('P','mm',$medio, true, 'UTF-8', false);
-        $pdf->SetTitle('EVALUACION OFTALMOLOGICA');  
+        $pdf->SetTitle('EVALUACION OFTALMOLOGICA');
         $pdf->setPrintHeader(false);
         $pdf->setPrintFooter(false);
         $pdf->SetAutoPageBreak(TRUE, 10);
         $pdf->SetMargins(15, 15, 10);
         $pdf->AddPage();
         $pdf->Image('storage/Optometria.png', 0, 1, 135, 20, 'PNG', '', '', true, 250, '', false, false, false, false, false, false);
-        
+
         $pdf->SetFont('','B','9');
         $pdf->SetXY(10, 39);
-        
-        
+
+
         $pdf->Line ( 10, 24,45,24,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
         $pdf->Line ( 53, 24,88,24,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
         $pdf->Line ( 95, 24,130,24,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
@@ -427,13 +460,13 @@ class EvaluacionesController extends Controller
         $pdf->SetXY(95, 19);
         $pdf->SetFont('','','9');
         $pdf->Write(0,$paciente[0]->NOM_PAC,'','',false);
-        
+
         $pdf->SetXY(15, 30);
         $pdf->SetFont('','','9');
         $pdf->Write(0,$paciente[0]->CI_PAC,'','',false);
         $pdf->SetXY(52, 30);
         $pdf->SetFont('','','9');
-        $edad = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente[0]->FEC_NAC)->format('Y'); 
+        $edad = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente[0]->FEC_NAC)->format('Y');
         $edad2 = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente[0]->FEC_NAC)->format('m');
         $edad3 = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente[0]->FEC_NAC)->format('d');
         $date = \Carbon\Carbon::createFromDate($edad,$edad2,$edad3)->age;
@@ -444,7 +477,7 @@ class EvaluacionesController extends Controller
         $pdf->SetXY(100, 30);
         $pdf->SetFont('','','9');
         $pdf->Write(0,\Carbon\Carbon::now()->format('d-m-Y'),'','',false);
-        
+
 
         $pdf->Line ( 10, 35,45,35,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
         $pdf->Line ( 50, 35,60,35,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
@@ -457,10 +490,10 @@ class EvaluacionesController extends Controller
         $pdf->Write(0,'EDAD','','',false);
         $pdf->SetXY(73, 36);
         $pdf->Write(0,'SEXO','','',false);
-        $pdf->SetXY(105, 36);   
+        $pdf->SetXY(105, 36);
         $pdf->Write(0,'FECHA','','',false);
-        
-        
+
+
         $pdf->SetFont('','','8');
         $pdf->SetXY(10, 45);
         $pdf->Write(0,'USA LENTES','','',false);
@@ -499,14 +532,14 @@ class EvaluacionesController extends Controller
             <tr>
                 <td><b>SALUD OCULAR</b></td>
                 <td> '.$soc.'</td>
-                
+
             </tr>
             <tr >
                 <td class"ref" rowspan="2"><b>REFRACTIVO</b></td>
                  <td><b>OD </b> '.$rod.'</td>
             </tr>
             <tr rowspan="2">
-                
+
                  <td><b>OI</b> '.$roi.'</td>
             </tr>
             </table>';
@@ -549,7 +582,7 @@ class EvaluacionesController extends Controller
                 <td>'.$cesi.'</td>
                 <td>'.$ccii.'</td>
                 <td>'.$ceji.'</td>
-                
+
                 <td>'.$cavi.'</td>
             </tr>
             </table>';
@@ -572,9 +605,9 @@ class EvaluacionesController extends Controller
             <tr class="fila" >
                 <td width="25%"><b>ADD</b></td>
                 <td width="80">'.$add.'</td>
-               
+
             </tr>
-           
+
             </table>';
             $pdf->writeHTML($html3, true, false, true, false, '');
         $pdf->SetXY(15, 140);
@@ -596,12 +629,12 @@ class EvaluacionesController extends Controller
         $pdf->SetFont('','B','8');
         $pdf->SetXY(15, 161);
         $pdf->Write(0,'OBSERVACIONES:','','',false);
-        if($request->input('opciones')=='NO'){   
+        if($request->input('opciones')=='NO'){
             $pdf->SetXY(102, 45);
             $pdf->SetFont('','B','11');
             $pdf->Write(0,'X','','',false);
         }
-        if($request->input('opciones')=='SI'){   
+        if($request->input('opciones')=='SI'){
             $pdf->SetXY(55.5, 45);
             $pdf->SetFont('','','11');
             $pdf->Write(0,'X','','',false);
@@ -609,7 +642,7 @@ class EvaluacionesController extends Controller
         $pdf->SetFont('','B','7');
         $pdf->Rect ( 55,45,5,5,'','', '');
         $pdf->Rect ( 102,45,5,5,'','', '');
-        
+
          $pdf->SetXY(15, 168);
          $pdf->SetFont('','B','8');
         $pdf->Write(0,'RESULTADO FINAL DE LA EVALUACION VISUAL','','',false);
@@ -619,7 +652,7 @@ class EvaluacionesController extends Controller
          $pdf->SetXY(10, 202);
          $pdf->SetFont('','B','7');
         $pdf->Write(0,'SELLO CENTRO DE SALUD','','',false);
-         
+
          $pdf->SetXY(60, 202);
          $pdf->SetFont('','B','7');
         $pdf->Write(0,'SELLO FIRMA EVALUADOR/A','','',false);
@@ -663,18 +696,18 @@ class EvaluacionesController extends Controller
         }
 
         $pdf = new TCPDF('P','mm','LETTER', true, 'UTF-8', false);
-        $pdf->SetTitle('EVALUACION OTORRINOLARINGOLOGICA');  
+        $pdf->SetTitle('EVALUACION OTORRINOLARINGOLOGICA');
         $pdf->setPrintHeader(false);
         $pdf->setPrintFooter(false);
         $pdf->SetAutoPageBreak(TRUE, 10);
         $pdf->SetMargins(15, 15, 10);
         $pdf->AddPage();
-        
-        
+
+
         $pdf->SetFont('','B','9');
         $pdf->SetXY(15, 42);
         $pdf->Write(0,'A) DATOS PERSONALES','','',false);
-        
+
         $pdf->Line ( 15, 55,55,55,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
         $pdf->Line ( 65, 55,105,55,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
         $pdf->Line ( 115, 55,155,55,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
@@ -706,7 +739,7 @@ class EvaluacionesController extends Controller
         $pdf->Write(0,$request->input('lug_nac').' '.$paciente[0]->FEC_NAC,'','',false);
         $pdf->SetXY(80, 70);
         $pdf->SetFont('','','11');
-        $edad = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente[0]->FEC_NAC)->format('Y'); 
+        $edad = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente[0]->FEC_NAC)->format('Y');
         $edad2 = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente[0]->FEC_NAC)->format('m');
         $edad3 = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente[0]->FEC_NAC)->format('d');
         $date = \Carbon\Carbon::createFromDate($edad,$edad3,$edad2)->age;
@@ -737,7 +770,7 @@ class EvaluacionesController extends Controller
         $pdf->Write(0,'EDAD','','',false);
         $pdf->SetXY(120, 78);
         $pdf->Write(0,'PROFESION','','',false);
-        $pdf->SetXY(165, 78);   
+        $pdf->SetXY(165, 78);
         $pdf->Write(0,'FECHA DEL EXAMEN','','',false);
         $pdf->Line ( 16, 95,150,95,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
          $pdf->Line ( 160, 95,200,95,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
@@ -761,7 +794,7 @@ class EvaluacionesController extends Controller
         $pdf->SetFont('','','10');
         $pdf->Write(0,$request->input('con_oto'),'','',false);
         $pdf->SetFont('','B','7');
-       
+
          $pdf->SetXY(15, 213);
          $pdf->SetFont('','B','9');
         $pdf->Write(0,'RESULTADO FINAL DE LA EVALUACION OTORRINOLARINGOLOGICA','','',false);
@@ -789,12 +822,12 @@ class EvaluacionesController extends Controller
         $pdf->Output('EvaluacionOtorrino.pdf');
     }
     public function pdfmedi(Request $request,$id,$ids)
-    {   
+    {
 
         if(isset($_POST['guardar'])){
         $ticket=Ticket::find($ids);
         $comprueba= EvaMedi::where('ID_TIC','=',$ids)->first();
-        
+
         if($comprueba){
         $idmed=$comprueba->id;
         $medica= EvaMedi::find($idmed);
@@ -805,7 +838,7 @@ class EvaluacionesController extends Controller
         $medica->LUG_MED= $request->input('lug_med');
         $paciente= Paciente::find($id);
         if($request->file('files')){
-        $foto=Carbon::now()->format('d-m-Y').'-'.preg_replace('[\s+]','',$paciente->CI_PAC).'.jpg'; 
+        $foto=Carbon::now()->format('d-m-Y').'-'.preg_replace('[\s+]','',$paciente->CI_PAC).'.jpg';
         $medica->FOT_PAC= $foto;
          \Storage::disk('local')->put($foto, \File::get($request->file('files')));
         }
@@ -874,7 +907,7 @@ class EvaluacionesController extends Controller
         $ticket->save();
         $mensaje="El paciente fue marcado como pendiente";
         $reservas= Reserva::join('ticket','ticket.id','=','ID_TIC')->join('pacientes','pacientes.id','=','ticket.ID_PAC')->join('users','users.id','=','ticket.ID_MED')->where('EST_TIC','!=',2)->where('ID_MED','=',Auth::user()->id)->get();
-       return redirect()->route('/')->with('reservas',$reservas)->with('mensaje2',$mensaje); 
+       return redirect()->route('/')->with('reservas',$reservas)->with('mensaje2',$mensaje);
        }
         if(isset($_POST['imprimir'])){
         $ticket=Ticket::find($ids);
@@ -1031,13 +1064,13 @@ class EvaluacionesController extends Controller
         }
 
         $pdf = new TCPDF('P','mm','LETTER', true, 'UTF-8', false);
-        $pdf->SetTitle('EVALUACION MEDICA');  
+        $pdf->SetTitle('EVALUACION MEDICA');
         $pdf->setPrintHeader(false);
         $pdf->setPrintFooter(false);
         $pdf->SetAutoPageBreak(TRUE, 10);
         $pdf->SetMargins(15, 15, 10);
         $pdf->AddPage();
-        
+
         $pdf->Line ( 20, 50,55,50,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
         $pdf->Line ( 60, 50,95,50,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
         $pdf->Line ( 105, 50,155,50,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
@@ -1066,25 +1099,25 @@ class EvaluacionesController extends Controller
         $pdf->Write(0,$paciente[0]->CI_PAC,'','',false);
         $pdf->SetXY(62, 57);
         $pdf->SetFont('','','11');
-        $edad = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente[0]->FEC_NAC)->format('Y'); 
+        $edad = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente[0]->FEC_NAC)->format('Y');
         $edad2 = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente[0]->FEC_NAC)->format('m');
         $edad3 = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente[0]->FEC_NAC)->format('d');
         $date = \Carbon\Carbon::createFromDate($edad,$edad2,$edad3)->age;
         $pdf->Write(0,$date,'','',false);
         $pacientes= Paciente::find($id);
         $pdf->Image('storage/'.Carbon::now()->format('d-m-Y').'-'.preg_replace('[\s+]','',$pacientes->CI_PAC).'.jpg', 170, 40, 35, 35,'PNG', '', '', true, 250, '', false, false, false, false, false, false);
-      
+
         $pdf->SetXY(110, 57);
         $pdf->SetFont('','','11');
         $pdf->Write(0,$request->input('lug_med').'   '.\Carbon\Carbon::now()->format('d-m-Y'),'','',false);
-       
+
         $pdf->SetXY(18, 110);
         $pdf->SetFont('','','10');
         $pdf->Write(0,$request->input('ant_oto'),'','',false);
         $pdf->Line ( 75, 63,95,63,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
         $pdf->Line ( 60, 63,70,63,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
         $pdf->Line ( 105, 63,155,63,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
-        
+
         $pdf->SetXY(75, 57);
         $pdf->SetFont('','','11');
         $pdf->Write(0,$paciente[0]->SEX_PAC,'','',false);
@@ -1093,21 +1126,21 @@ class EvaluacionesController extends Controller
         $pdf->Write(0,'EDAD','','',false);
         $pdf->SetXY(80, 64);
         $pdf->Write(0,'SEXO','','',false);
-        $pdf->SetXY(110, 64);   
+        $pdf->SetXY(110, 64);
         $pdf->Write(0,'LUGAR Y FECHA DEL EXAMEN','','',false);
-       
-        $pdf->SetFont('','B','9');     
+
+        $pdf->SetFont('','B','9');
         $pdf->SetXY(15, 75);
         $pdf->Write(0,'I. ANTECEDENTES','','',false);
         $pdf->SetXY(10, 80);
         $pdf->Write(0,'Antecedentes relacionados con la conduccion:','','',false);
         $pdf->SetXY(85, 80);
-        $pdf->SetFont('','','9');     
+        $pdf->SetFont('','','9');
         $pdf->MultiCell(115, 2, $request->input('aco_med') , 0, 'L', 0, 0, '', '', true);
         $pdf->SetXY(80, 98);
-        $pdf->SetFont('','','9'); 
+        $pdf->SetFont('','','9');
         $pdf->MultiCell(115, 2, $request->input('apa_med') , 0, 'L', 0, 0, '', '', true);
-        $pdf->SetFont('','B','5');     
+        $pdf->SetFont('','B','5');
         $pdf->SetXY(76, 142);
         $pdf->Write(0,'SI','','',false);
         $pdf->SetXY(86, 142);
@@ -1116,13 +1149,13 @@ class EvaluacionesController extends Controller
         $pdf->Write(0,'SI','','',false);
         $pdf->SetXY(196, 142);
         $pdf->Write(0,'NO','','',false);
-        
-        $pdf->SetFont('','B','9');     
+
+        $pdf->SetFont('','B','9');
         $pdf->SetXY(10, 98);
         $pdf->Write(0,'Antecedentes personales patológicos:','','',false);
-       
-        $pdf->SetFont('','','9');     
-        
+
+        $pdf->SetFont('','','9');
+
         $pdf->SetXY(55, 152);
         $pdf->Write(0,$request->input('sig_med'),'','',false);
         $pdf->SetXY(105, 152);
@@ -1158,7 +1191,7 @@ class EvaluacionesController extends Controller
          $pdf->SetXY(150, 245);
         $pdf->Write(0,$request->input('vpr_med'),'','',false);
 
-        $pdf->SetFont('','B','9');     
+        $pdf->SetFont('','B','9');
         $pdf->SetXY(15, 118);
         $pdf->Write(0,'Hábitos:','','',false);
         $pdf->SetXY(15, 136);
@@ -1204,7 +1237,7 @@ class EvaluacionesController extends Controller
         }elseif($request->input('opciones')=='UNA O MAS A LA SEMANA')
         {
             $pdf->SetXY(186, 118);
-            $pdf->Write(0,'X','','',false);   
+            $pdf->Write(0,'X','','',false);
         }
         if($request->input('opciones2')=='NUNCA')
         {
@@ -1217,25 +1250,25 @@ class EvaluacionesController extends Controller
         }elseif($request->input('opciones2')=='UNA O MAS A LA SEMANA')
         {
             $pdf->SetXY(186, 127);
-            $pdf->Write(0,'X','','',false);   
+            $pdf->Write(0,'X','','',false);
         }
         if($request->input('opciones3')=='SI')
         {
             $pdf->SetXY(76, 136);
-            $pdf->Write(0,'X','','',false);   
+            $pdf->Write(0,'X','','',false);
         }elseif($request->input('opciones3')=='NO')
         {
             $pdf->SetXY(86, 136);
-            $pdf->Write(0,'X','','',false);   
+            $pdf->Write(0,'X','','',false);
         }
          if($request->input('opciones4')=='SI')
         {
             $pdf->SetXY(186, 136);
-            $pdf->Write(0,'X','','',false);   
+            $pdf->Write(0,'X','','',false);
         }elseif($request->input('opciones4')=='NO')
         {
             $pdf->SetXY(196, 136);
-            $pdf->Write(0,'X','','',false);   
+            $pdf->Write(0,'X','','',false);
         }
         $pdf->SetXY(15, 145);
         $pdf->Write(0,'II. EXAMEN CLINICO:','','',false);
@@ -1258,7 +1291,7 @@ class EvaluacionesController extends Controller
         $pdf->Write(0,'TALLA:','','',false);
         $pdf->SetXY(155, 168);
         $pdf->Write(0,'PESO:','','',false);
-        
+
         $pdf->SetXY(105, 144);
         $pdf->SetFont('','B','12');
         $pdf->Write(0,$request->input('gsa_med').' '.$request->input('rh_med'),'','',false);
@@ -1292,23 +1325,23 @@ class EvaluacionesController extends Controller
           if($request->input('opciones5')=='SI')
         {
             $pdf->SetXY(109, 224);
-            $pdf->Write(0,'X','','',false);   
+            $pdf->Write(0,'X','','',false);
         }elseif($request->input('opciones5')=='NO')
         {
             $pdf->SetXY(160, 224);
-            $pdf->Write(0,'X','','',false);   
+            $pdf->Write(0,'X','','',false);
         }
           if($request->input('opciones6')=='SI')
         {
             $pdf->SetXY(109, 231);
-            $pdf->Write(0,'X','','',false);   
+            $pdf->Write(0,'X','','',false);
         }elseif($request->input('opciones6')=='NO')
         {
             $pdf->SetXY(160, 231);
-            $pdf->Write(0,'X','','',false);   
+            $pdf->Write(0,'X','','',false);
         }
             $pdf->SetXY(15, 245);
-            $pdf->Write(0,'Agudeza visual','','',false); 
+            $pdf->Write(0,'Agudeza visual','','',false);
             $pdf->SetXY(28, 256);
             $pdf->Write(0,$request->input('ald_med'),'','',false);
             $pdf->SetXY(45, 256);
@@ -1321,7 +1354,7 @@ class EvaluacionesController extends Controller
             $pdf->Write(0,$request->input('asi_med'),'','',false);
             $pdf->SetXY(62, 261);
             $pdf->Write(0,$request->input('aci_med'),'','',false);
-             
+
             $pdf->SetXY(15, 250);
             $html='
             <style>
@@ -1348,7 +1381,7 @@ class EvaluacionesController extends Controller
                 <td></td>
             </tr>
             </table>';
-            $pdf->writeHTML($html, true, false, true, false, '');        
+            $pdf->writeHTML($html, true, false, true, false, '');
         $pdf->SetXY(75, 231);
         $pdf->Write(0,'Usa Lentes:','','',false);
         $pdf->SetXY(75, 238);
@@ -1426,24 +1459,24 @@ class EvaluacionesController extends Controller
           if($request->input('opciones7')=='SI')
         {
             $pdf->SetXY(119, 190);
-            $pdf->Write(0,'X','','',false);   
+            $pdf->Write(0,'X','','',false);
         }elseif($request->input('opciones7')=='NO')
         {
             $pdf->SetXY(179, 190);
-            $pdf->Write(0,'X','','',false);   
+            $pdf->Write(0,'X','','',false);
         }
           if($request->input('opciones8')=='SI')
         {
             $pdf->SetXY(119, 217);
-            $pdf->Write(0,'X','','',false);   
+            $pdf->Write(0,'X','','',false);
         }elseif($request->input('opciones8')=='NO')
         {
             $pdf->SetXY(179, 217);
-            $pdf->Write(0,'X','','',false);   
+            $pdf->Write(0,'X','','',false);
         }
         $pdf->SetXY(125, 190);
-             
-        $pdf->MultiCell(50, 2, $request->input('esp_med') , 0, 'L', 0, 0, '', '', true); 
+
+        $pdf->MultiCell(50, 2, $request->input('esp_med') , 0, 'L', 0, 0, '', '', true);
         $pdf->SetXY(110, 190);
         $pdf->Write(0,'SI','','',false);
         $pdf->SetXY(170, 190);
@@ -1452,7 +1485,7 @@ class EvaluacionesController extends Controller
         $pdf->Write(0,'SI','','',false);
         $pdf->SetXY(170, 217);
         $pdf->Write(0,'NO','','',false);
-        
+
         $pdf->SetXY(20, 44);
         $pdf->Write(0,'APARATO AUDITIVO:','','',false);
         $pdf->SetXY(26, 50);
@@ -1547,19 +1580,19 @@ class EvaluacionesController extends Controller
         $pdf->SetXY(20, 237);
         $pdf->SetFont('','UB','10');
         $pdf->MultiCell(150, 2, 'NO APTO PARA CONDUCIR - '.$request->input('mna_med'), 0, 'L', 0, 0, '', '', true);
-        } 
+        }
         if(($request->input('rfs_med')!='') && ($request->input('rft_med')==''))
             {
             $pdf->SetXY(137, 239);
             $pdf->SetFont('','UB','11');
             $pdf->Write(0,' Y "'.$request->input('rfs_med').'"','','',false);
-            }        
+            }
         if(($request->input('rfs_med')!='')&&($request->input('rft_med')!=''))
             {
             $pdf->SetXY(137, 239);
             $pdf->SetFont('','UB','11');
             $pdf->Write(0,', "'.$request->input('rfs_med').'" Y "'.$request->input('rft_med').'"','','',false);
-            }        
+            }
         $pdf->Line ( 30, 263,70,263,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
         $pdf->Line ( 80, 263,120,263,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
         $pdf->Line ( 130, 263,165,263,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
@@ -1580,10 +1613,10 @@ class EvaluacionesController extends Controller
     }
 
     public function pdfhistmedi($id, $ids)
-    {   
+    {
         $medica=Evamedi::find($ids);
         $pdf = new TCPDF('P','mm','LETTER', true, 'UTF-8', false);
-        $pdf->SetTitle('EVALUACION MEDICA');  
+        $pdf->SetTitle('EVALUACION MEDICA');
         $pdf->setPrintHeader(false);
         $pdf->setPrintFooter(false);
         $pdf->SetAutoPageBreak(TRUE, 10);
@@ -1618,7 +1651,7 @@ class EvaluacionesController extends Controller
         $pdf->Write(0,$paciente[0]->CI_PAC,'','',false);
         $pdf->SetXY(62, 57);
         $pdf->SetFont('','','11');
-        $edad = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente[0]->FEC_NAC)->format('Y'); 
+        $edad = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente[0]->FEC_NAC)->format('Y');
         $edad2 = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente[0]->FEC_NAC)->format('m');
         $edad3 = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente[0]->FEC_NAC)->format('d');
         $date = \Carbon\Carbon::createFromDate($edad,$edad2,$edad3)->age;
@@ -1628,12 +1661,12 @@ class EvaluacionesController extends Controller
         $pdf->SetXY(110, 57);
         $pdf->SetFont('','','11');
         $pdf->Write(0,$medica->LUG_MED.'   '.\Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$medica->FEC_MED)->format('d-m-Y'),'','',false);
-       
-       
+
+
         $pdf->Line ( 75, 63,95,63,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
         $pdf->Line ( 60, 63,70,63,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
         $pdf->Line ( 105, 63,155,63,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
-        
+
         $pdf->SetXY(75, 57);
         $pdf->SetFont('','','11');
         $pdf->Write(0,$paciente[0]->SEX_PAC,'','',false);
@@ -1642,21 +1675,21 @@ class EvaluacionesController extends Controller
         $pdf->Write(0,'EDAD','','',false);
         $pdf->SetXY(80, 64);
         $pdf->Write(0,'SEXO','','',false);
-        $pdf->SetXY(110, 64);   
+        $pdf->SetXY(110, 64);
         $pdf->Write(0,'LUGAR Y FECHA DEL EXAMEN','','',false);
-       
-        $pdf->SetFont('','B','9');     
+
+        $pdf->SetFont('','B','9');
         $pdf->SetXY(15, 75);
         $pdf->Write(0,'I. ANTECEDENTES','','',false);
         $pdf->SetXY(10, 80);
         $pdf->Write(0,'Antecedentes relacionados con la conduccion:','','',false);
         $pdf->SetXY(85, 80);
-        $pdf->SetFont('','','9');     
+        $pdf->SetFont('','','9');
         $pdf->MultiCell(115, 2, $medica->ACO_MED , 0, 'L', 0, 0, '', '', true);
         $pdf->SetXY(80, 98);
-        $pdf->SetFont('','','9'); 
+        $pdf->SetFont('','','9');
         $pdf->MultiCell(115, 2, $medica->APA_MED , 0, 'L', 0, 0, '', '', true);
-        $pdf->SetFont('','B','5');     
+        $pdf->SetFont('','B','5');
         $pdf->SetXY(76, 142);
         $pdf->Write(0,'SI','','',false);
         $pdf->SetXY(86, 142);
@@ -1665,13 +1698,13 @@ class EvaluacionesController extends Controller
         $pdf->Write(0,'SI','','',false);
         $pdf->SetXY(196, 142);
         $pdf->Write(0,'NO','','',false);
-        
-        $pdf->SetFont('','B','9');     
+
+        $pdf->SetFont('','B','9');
         $pdf->SetXY(10, 98);
         $pdf->Write(0,'Antecedentes personales patológicos:','','',false);
-       
-        $pdf->SetFont('','','9');     
-        
+
+        $pdf->SetFont('','','9');
+
         $pdf->SetXY(55, 152);
         $pdf->Write(0,$medica->SIG_MED,'','',false);
         $pdf->SetXY(105, 152);
@@ -1707,7 +1740,7 @@ class EvaluacionesController extends Controller
          $pdf->SetXY(150, 245);
         $pdf->Write(0,$medica->VPR_MED,'','',false);
 
-        $pdf->SetFont('','B','9');     
+        $pdf->SetFont('','B','9');
         $pdf->SetXY(15, 118);
         $pdf->Write(0,'Hábitos:','','',false);
         $pdf->SetXY(15, 136);
@@ -1753,7 +1786,7 @@ class EvaluacionesController extends Controller
         }elseif($medica->HBE_MED=='UNA O MAS A LA SEMANA')
         {
             $pdf->SetXY(186, 118);
-            $pdf->Write(0,'X','','',false);   
+            $pdf->Write(0,'X','','',false);
         }
         if($medica->HFU_MED=='NUNCA')
         {
@@ -1766,25 +1799,25 @@ class EvaluacionesController extends Controller
         }elseif($medica->HFU_MED=='UNA O MAS A LA SEMANA')
         {
             $pdf->SetXY(186, 127);
-            $pdf->Write(0,'X','','',false);   
+            $pdf->Write(0,'X','','',false);
         }
         if($medica->VAM_MED=='SI')
         {
             $pdf->SetXY(76, 136);
-            $pdf->Write(0,'X','','',false);   
+            $pdf->Write(0,'X','','',false);
         }elseif($medica->VAM_MED=='NO')
         {
             $pdf->SetXY(86, 136);
-            $pdf->Write(0,'X','','',false);   
+            $pdf->Write(0,'X','','',false);
         }
          if($medica->VTE_MED=='SI')
         {
             $pdf->SetXY(186, 136);
-            $pdf->Write(0,'X','','',false);   
+            $pdf->Write(0,'X','','',false);
         }elseif($medica->VTE_MED=='NO')
         {
             $pdf->SetXY(196, 136);
-            $pdf->Write(0,'X','','',false);   
+            $pdf->Write(0,'X','','',false);
         }
         $pdf->SetXY(15, 145);
         $pdf->Write(0,'II. EXAMEN CLINICO:','','',false);
@@ -1807,7 +1840,7 @@ class EvaluacionesController extends Controller
         $pdf->Write(0,'TALLA:','','',false);
         $pdf->SetXY(155, 168);
         $pdf->Write(0,'PESO:','','',false);
-        
+
         $pdf->SetXY(105, 144);
         $pdf->SetFont('','B','12');
         $pdf->Write(0,$medica->GSA_MED,'','',false);
@@ -1841,23 +1874,23 @@ class EvaluacionesController extends Controller
           if($medica->ETR_MED=='SI')
         {
             $pdf->SetXY(109, 224);
-            $pdf->Write(0,'X','','',false);   
+            $pdf->Write(0,'X','','',false);
         }elseif($medica->ETR_MED=='NO')
         {
             $pdf->SetXY(160, 224);
-            $pdf->Write(0,'X','','',false);   
+            $pdf->Write(0,'X','','',false);
         }
           if($medica->LEN_MED=='SI')
         {
             $pdf->SetXY(109, 231);
-            $pdf->Write(0,'X','','',false);   
+            $pdf->Write(0,'X','','',false);
         }elseif($medica->LEN_MED=='NO')
         {
             $pdf->SetXY(160, 231);
-            $pdf->Write(0,'X','','',false);   
+            $pdf->Write(0,'X','','',false);
         }
             $pdf->SetXY(15, 245);
-            $pdf->Write(0,'Agudeza visual','','',false); 
+            $pdf->Write(0,'Agudeza visual','','',false);
             $pdf->SetXY(28, 256);
             $pdf->Write(0,$medica->ALD_MED,'','',false);
             $pdf->SetXY(45, 256);
@@ -1870,7 +1903,7 @@ class EvaluacionesController extends Controller
             $pdf->Write(0,$medica->ASI_MED,'','',false);
             $pdf->SetXY(62, 261);
             $pdf->Write(0,$medica->ACI_MED,'','',false);
-             
+
             $pdf->SetXY(15, 250);
             $html='
             <style>
@@ -1897,7 +1930,7 @@ class EvaluacionesController extends Controller
                 <td></td>
             </tr>
             </table>';
-            $pdf->writeHTML($html, true, false, true, false, '');        
+            $pdf->writeHTML($html, true, false, true, false, '');
         $pdf->SetXY(75, 231);
         $pdf->Write(0,'Usa Lentes:','','',false);
         $pdf->SetXY(75, 238);
@@ -1976,24 +2009,24 @@ class EvaluacionesController extends Controller
           if($medica->REE_MED=='SI')
         {
             $pdf->SetXY(119, 190);
-            $pdf->Write(0,'X','','',false);   
+            $pdf->Write(0,'X','','',false);
         }elseif($medica->REE_MED=='NO')
         {
             $pdf->SetXY(179, 190);
-            $pdf->Write(0,'X','','',false);   
+            $pdf->Write(0,'X','','',false);
         }
           if($medica->REP_MED=='SI')
         {
             $pdf->SetXY(119, 217);
-            $pdf->Write(0,'X','','',false);   
+            $pdf->Write(0,'X','','',false);
         }elseif($medica->REP_MED=='NO')
         {
             $pdf->SetXY(179, 217);
-            $pdf->Write(0,'X','','',false);   
+            $pdf->Write(0,'X','','',false);
         }
         $pdf->SetXY(125, 190);
-             
-        $pdf->MultiCell(50, 2, $medica->ESP_MED , 0, 'L', 0, 0, '', '', true); 
+
+        $pdf->MultiCell(50, 2, $medica->ESP_MED , 0, 'L', 0, 0, '', '', true);
         $pdf->SetXY(110, 190);
         $pdf->Write(0,'SI','','',false);
         $pdf->SetXY(170, 190);
@@ -2002,7 +2035,7 @@ class EvaluacionesController extends Controller
         $pdf->Write(0,'SI','','',false);
         $pdf->SetXY(170, 217);
         $pdf->Write(0,'NO','','',false);
-        
+
         $pdf->SetXY(20, 44);
         $pdf->Write(0,'APARATO AUDITIVO:','','',false);
         $pdf->SetXY(26, 50);
@@ -2097,19 +2130,19 @@ class EvaluacionesController extends Controller
         $pdf->SetXY(20, 237);
         $pdf->SetFont('','UB','10');
         $pdf->MultiCell(150, 2, 'NO APTO PARA CONDUCIR - '.$medica->MNA_MED, 0, 'L', 0, 0, '', '', true);
-        } 
+        }
         if(($medica->RFS_MED!='') && ($medica->RFT_MED==''))
             {
             $pdf->SetXY(137, 239);
             $pdf->SetFont('','UB','11');
             $pdf->Write(0,' Y "'.$medica->RFS_MED.'"','','',false);
-            }        
+            }
         if(($medica->RFS_MED!='')&&($medica->RFT_MED!=''))
             {
             $pdf->SetXY(137, 239);
             $pdf->SetFont('','UB','11');
             $pdf->Write(0,', "'.$medica->RFS_MED.'" Y "'.$medica->RFT_MED.'"','','',false);
-            }        
+            }
         $pdf->Line ( 30, 263,70,263,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
         $pdf->Line ( 80, 263,120,263,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
         $pdf->Line ( 130, 263,165,263,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
@@ -2128,8 +2161,8 @@ class EvaluacionesController extends Controller
         $pdf->Output('EvaluacionMedica.pdf');
     }
      public function pdfreceta(Request $request,$id)
-    
-    {   
+
+    {
         $receta=new Receta;
         $receta->DES_REC=$request->input('rec_med');
         $receta->ID_PAC=$id;
@@ -2137,18 +2170,18 @@ class EvaluacionesController extends Controller
         $receta->save();
         $pagelayout = array('165', '107.5');
         $pdf = new TCPDF('P','mm',$pagelayout, true, 'UTF-8', false);
-        $pdf->SetTitle('RECETA MEDICA');  
+        $pdf->SetTitle('RECETA MEDICA');
         $pdf->setPrintHeader(false);
         $pdf->setPrintFooter(false);
         $pdf->SetAutoPageBreak(TRUE, 10);
         $pdf->SetMargins(15, 15, 10);
         $pdf->AddPage();
-        
-        
+
+
         $pdf->SetFont('','B','9');
         $pdf->SetXY(15, 35);
         $pdf->Write(0,'A) DATOS PERSONALES','','',false);
-        
+
         $pdf->Line ( 15, 55,55,55,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
         $pdf->Line ( 65, 55,105,55,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
         $pdf->Line ( 115, 55,155,55,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
@@ -2180,7 +2213,7 @@ class EvaluacionesController extends Controller
         $pdf->Write(0,$request->input('lug_nac').' '.$paciente[0]->FEC_NAC,'','',false);
         $pdf->SetXY(80, 70);
         $pdf->SetFont('','','11');
-        $edad = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente[0]->FEC_NAC)->format('Y'); 
+        $edad = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente[0]->FEC_NAC)->format('Y');
         $edad2 = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente[0]->FEC_NAC)->format('m');
         $edad3 = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente[0]->FEC_NAC)->format('d');
         $date = \Carbon\Carbon::createFromDate($edad,$edad3,$edad2)->age;
@@ -2197,7 +2230,7 @@ class EvaluacionesController extends Controller
         $pdf->SetXY(18, 110);
         $pdf->SetFont('','','11');
         $pdf->Write(0,$request->input('his_psi'),'','',false);
-        
+
 
         $pdf->Line ( 15, 75,70,75,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
         $pdf->Line ( 75, 75,95,75,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
@@ -2210,10 +2243,10 @@ class EvaluacionesController extends Controller
         $pdf->Write(0,'EDAD','','',false);
         $pdf->SetXY(120, 78);
         $pdf->Write(0,'PROFESION','','',false);
-        $pdf->SetXY(165, 78);   
+        $pdf->SetXY(165, 78);
         $pdf->Write(0,'FECHA DEL EXAMEN','','',false);
         $pdf->Line ( 16, 95,205,95,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
-        
+
         $pdf->write2DBarcode ( 'Paciente :'.$paciente[0]->NOM_PAC.' '.$paciente[0]->APA_PAC.' '.$paciente[0]->AMA_PAC.' | Medico: '.Auth::user()->NOM_USU.' '.Auth::user()->APA_USU.' '.Auth::user()->AMA_USU.' | Fecha:'.$receta->FEC_REC, 'QRCODE,M', 170, 230, 30, 30, '','','');
         $pdf->Output('EvaluacionPsicologica.pdf');
     }

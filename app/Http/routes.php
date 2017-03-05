@@ -17,7 +17,7 @@ Route::get('logout', 'Auth\AuthController@getLogout');
 Route::group(['middleware' => 'auth'], function () {
 Route::get('/',['as'=>'/','uses'=>'ClientesController@index']);
 Route::get('pacientessegip',['as'=>'pacientessegip','uses'=>'PacientesController@index']);
-Route::get('pacientesdarsalud','ClientesController@index3');
+Route::get('pacientesdarsalud',['as'=>'pacientesdarsalud','uses'=>'ClientesController@index3']);
 Route::get('facturacion','ClientesController@factura');
 Route::post('registrarpacientes','PacientesController@store');
 Route::get('farmacia',['as'=>'farmacia','uses'=>'ClientesController@farmacia']);
@@ -25,7 +25,9 @@ Route::get('reservas',['as'=>'reservas','uses'=>'ClientesController@reservas']);
 Route::post('consultoriosmed','PacientesController@consultasmed');
 Route::post('consultoriospac','PacientesController@consultaspac');
 Route::post('registroticket','PacientesController@ticket');
+Route::post('registroticket2','PacientesController@ticket2');
 Route::post('modificarticket','PacientesController@mticket');
+Route::post('modificarticket2','PacientesController@mticket2');
 Route::post('reservaticket','PacientesController@reservaticket');
 
 
@@ -60,5 +62,6 @@ Route::get('pendientes','PacientesController@listapendientes');
 Route::post('medicos','PacientesController@medicosact');
 Route::post('medicos2','PacientesController@medicosact2');
 Route::post('/{id}/{ev}/datospac','PacientesController@datospac');
+Route::post('/{id}/{ev}/datospac2','PacientesController@datospac2');
 Route::get('export','ExcelController@actionIndex');
 Route::get('/pacientes/{id}/histmedica/{ids}','EvaluacionesController@pdfhistmedi');

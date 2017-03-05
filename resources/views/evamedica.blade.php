@@ -1067,7 +1067,7 @@ $(document).ready(function(){
                     SI
                     </label>
                     <label style="margin-right:10%;">
-                    <input type="radio" name="opciones7" id="opciones_21" value="NO" checked >
+                    <input type="radio" name="opciones7" id="opciones_21" value="NO" >
                     NO
                     </label>
                     </div>
