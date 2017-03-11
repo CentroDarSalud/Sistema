@@ -22,20 +22,20 @@
  <nav class="navbar navbar-inverse no-margin" style="border-radius: 0; background-color: #000;">
     <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header fixed-brand" >
-                    
-                    <a class="navbar-brand" href="/" style="color: #21D3F3; padding-left: 14%; font-size: 25px;"><span class="fa fa-medkit"></span> <b>DARSALUD</b></a>
+
+                    <a class="navbar-brand" href="{{url('/')}}" style="color: #21D3F3; padding-left: 14%; font-size: 25px;"><span class="fa fa-medkit"></span> <b>DARSALUD</b></a>
                 </div><!-- navbar-header-->
- 
+
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                            
+
                 </div><!-- bs-example-navbar-collapse-1 -->
     </nav>
-   
+
         <!-- Sidebar -->
 
         <!-- Page Content -->
-        
-                    
+
+
                        <div class="container">
 <div  style="width:100%; background:#fff; margin-top:1%;">
     <div class="alert alert-info" style="font-size:23px;">Evaluacion Otorrinolaringologica <a style="margin-left:45%;" href="../../<?php echo $id;?>" class="btn btn-primary">Ver historial clinico</a><a style="margin-left:2%;" href="<?php echo $ids;?>/finalizar" class="btn btn-danger">Finalizar</a></div>
@@ -76,14 +76,14 @@
                         <input type="text" readonly="readonly" class="form-control" name="" value="{{ $paciente->FEC_NAC}}">
                     </div>                                   <label class="col-lg-1">Edad: </label>
                     <div class="col-lg-1">
-                        <input type="text" readonly="readonly" class="form-control" name="" value="<?php 
-      $edad = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente->FEC_NAC)->format('Y'); 
+                        <input type="text" readonly="readonly" class="form-control" name="" value="<?php
+      $edad = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente->FEC_NAC)->format('Y');
       $edad2 = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente->FEC_NAC)->format('m');
       $edad3 = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente->FEC_NAC)->format('d');
-      
+
        echo $date = \Carbon\Carbon::createFromDate($edad,$edad3,$edad2)->age;
        ?>">
-                    </div>                                  
+                    </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-2">Profesion : </label>
@@ -136,22 +136,22 @@
             <textarea required="yes" name="rfi_oto" class="form-control" rows="3">APTO PARA CONDUCIR CATEGORIA " " </textarea>
         </div>
     </div>
-</fieldset>   
+</fieldset>
 <div class = "modal-footer">
             <button type = "submit" target="_blank" class = "btn btn-primary" data-dismiss = "modal"><span class="glyphicon glyphicon-check"></span>
               IMPRIMIR EVALUACION
             </button>
-            
-            
-         </div>  
-        </form>          
+
+
+         </div>
+        </form>
 
                     </div>
                 </div>
             </div>
         </div>
         <!-- /#page-content-wrapper -->
-    
+
 
 	{!! Html::script('assets/js/sidebar2.js')!!}
 </body>

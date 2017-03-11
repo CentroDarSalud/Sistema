@@ -39,13 +39,43 @@ function limita(elEvento, maximoCaracteres) {
   }
 }
  </script>
+ <script type="text/javascript">
+    $(document).ready(function(){
 
+    $("#categoria").change(function () {
+            $("#categoria option:selected").each(function () {
+             id = $(this).val();
+             $.post("cargarlaboratorios", { id: id }, function(data){
+                 $("#tablabody").html(data);
+             });
+         });
+        });
+    });
+
+   </script>
+   <script type='text/javascript' language='javascript' class='init'>
+        function elimina(data)
+        {
+        $('#'+data).remove();
+        }
+   </script>
+       <script type='text/javascript' language='javascript' class='init'>
+       $(document).ready(function() {
+       $('#example2').DataTable();
+       });
+        </script>
+        <script type='text/javascript' language='javascript' class='init'>
+        var cont=0;
+       function agregavalor(data1,data2,data3){
+       cont++;
+       var fila="<tr id=fila"+cont+" ><td>"+data1+" <input  type='hidden' name='idproducto[]' value="+data3+">s</td><td><input type='text' readonly='yes' class='form-control' value="+data2+" name='pre_pro[]'></td><td><input required class='form-control' type="+"number"+" id="+"can_pro"+" min="+"1"+" name="+"can_pro"+"[]></td><td class="+"info"+"><input class="+"form-control"+" readonly="+"yes"+" type="+"number"+" name="+"sub_pro"+"[]></td><td><button type="+"button"+" class='."'btn btn-danger btn-circle btn-lg2' "."onclick=javascript:elimina('fila".'"+cont+"'."') title='Eliminar'><i class='fa fa-minus'></i></button>'".'</td></tr>
+
+           $('."'#tabla'".').append(fila);
+           </script>
 <script type="text/javascript">
   function pdfreceta()
   {
     document.fmedica.submit();
-
-
   }
 </script>
 <script language="Javascript">
@@ -94,7 +124,7 @@ return false;
 
                        <div class="container">
 <div  style="width:100%; background:#fff; margin-top:1%;">
-    <div class="alert alert-info" style="font-size:23px;">Recetas<a style="margin-left:50%;" onclick='javascript:preguntar({{ $id }});'  class="btn btn-warning">Volver al historial</a> <a target="_blank" style="margin-left:1%;" class = "btn btn-primary" onclick="javascript:pdfreceta();"><span class="fa fa-print"></span>
+    <div class="alert alert-info" style="font-size:23px;">Laboratorios<a style="margin-left:50%;" onclick='javascript:preguntar({{ $id }});'  class="btn btn-warning">Volver al historial</a> <a target="_blank" style="margin-left:1%;" class = "btn btn-primary" onclick="javascript:pdfreceta();"><span class="fa fa-print"></span>
               Imprimir
             </a>
 
@@ -145,18 +175,45 @@ return false;
                 </div>
                 </fieldset>
             <fieldset style="background-color:#B9DEE3; padding: 2%;">
-                <legend>Receta medica</legend>
+                <legend>Lista de laboratorios</legend>
                 <div class="form-group">
-                    <div class="col-lg-12">
-                        <textarea rows="15" id="texto"  class="form-control" name="rec_med" ></textarea>
+                    <label class="col-lg-2 control-label">Categoria:</label>
+                    <div class="col-lg-3">
+                        <select class="form-control" name="">
+                          <option value="">SELECCIONE</option>
+                        </select>
+                    </div>
+                    <label class="col-lg-2 control-label">Laboratorio:</label>
+                    <div class="col-lg-3">
+                        <select class="form-control" name="">
+                          <option value="">SELECCIONE</option>
+                        </select>
                     </div>
                    </div>
                    </fieldset>
                    <div class = "modal-footer">
-            <button type = "submit" target="_blank" class = "btn btn-primary" data-dismiss = "modal"><span class="fa fa-print"></span>
-              Imprimir receta
-            </button>
+                     <div class="form-group ">
+                       <table id="tabla" class="table table-responsive table-hover">
+	                        <!-- Cabecera de la tabla -->
+						                    <thead>
+  							<tr class="active">
 
+								<th width="50%">Laboratorio</th>
+								<th width="15%" class="info">Categoria</th>
+								<th width="2%">&nbsp;</th>
+							</tr>
+						</thead>
+
+
+		<!-- fin de código: fila base -->
+
+		<!-- Fila de ejemplo -->
+
+		<!-- fin de código: fila de ejemplo -->
+
+
+					</table>
+                     </div>
 
          </div>
         </form>

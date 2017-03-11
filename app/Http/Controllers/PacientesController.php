@@ -464,6 +464,11 @@ echo '<div style=" width:25%; height:auto;float:left; padding: 2%; margin-left:1
     {   $paciente= Paciente::find($id);
         return view('recetas')->with('paciente',$paciente)->with('id',$id);
     }
+    public function laboratorios($id)
+    {   $paciente= Paciente::find($id);
+        return view('laboratorios')->with('paciente',$paciente)->with('id',$id);
+    }
+
      public function otorrino($id, $ids)
     {   $paciente= Paciente::find($id);
         $tickets= Ticket::find($ids);

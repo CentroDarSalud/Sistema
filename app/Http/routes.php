@@ -39,17 +39,21 @@ Route::post('salidaproducto','PacientesController@salidaproducto');
 Route::post('reservar','PacientesController@reservar');
 Route::post('atencion','PacientesController@atencion');
 Route::post('ausente','PacientesController@ausente');
+
+Route::post('cargarlaboratorios','ClientesController@laboratorios');
+
 Route::get('{id}/evaluacionpsicologica/{ids}','PacientesController@psicologica');
 Route::get('{id}/evaluacionmedica/{ids}','PacientesController@medica');
 Route::get('{id}/evaluacionoftalmologica/{ids}','PacientesController@oftalmo');
 Route::get('{id}/evaluacionotorrinolaringologica/{ids}','PacientesController@otorrino');
 Route::get('{id}/evaluacionpsicologica/{ids}/finalizar','PacientesController@finalizar');
 Route::get('{id}/evaluacionotorrinolaringologica/{ids}/finalizar','PacientesController@finalizar');
-Route::get('pacientes/{id}','PacientesController@historial');
+Route::get('pacientes/{id}',['as'=>'pacientes/{id}','uses'=>'PacientesController@historial']);
 Route::post('modificarpacientes','PacientesController@modificar');
 Route::post('pacientes/{id}/pdfreceta','EvaluacionesController@pdfreceta');
 
 Route::get('pacientes/{id}/recetas','PacientesController@recetas');
+Route::get('pacientes/{id}/laboratorios','PacientesController@laboratorios');
 Route::get('{id}/evaluacionmedica/{ids}/finalizar','PacientesController@finalizar');
 Route::post('{id}/evaluacionpsicologica/{ids}/pdfpsico','EvaluacionesController@pdfpsico');
 Route::post('{id}/evaluacionoftalmologica/{ids}/pdfoftalmo','EvaluacionesController@pdfoftalmo');
@@ -65,3 +69,4 @@ Route::post('/{id}/{ev}/datospac','PacientesController@datospac');
 Route::post('/{id}/{ev}/datospac2','PacientesController@datospac2');
 Route::get('export','ExcelController@actionIndex');
 Route::get('/pacientes/{id}/histmedica/{ids}','EvaluacionesController@pdfhistmedi');
+Route::get('/pacientes/{id}/histpsico/{ids}','EvaluacionesController@pdfhistpsico');

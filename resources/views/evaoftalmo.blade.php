@@ -22,27 +22,27 @@
  <nav class="navbar navbar-inverse no-margin" style="border-radius: 0; background-color: #000;">
     <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header fixed-brand" >
-                    
-                    <a class="navbar-brand" href="/Darsalud/public" style="color: #21D3F3; padding-left: 14%; font-size: 25px;"><span class="fa fa-medkit"></span> <b>DARSALUD</b></a>
+
+                    <a class="navbar-brand" href="{{url('/')}}" style="color: #21D3F3; padding-left: 14%; font-size: 25px;"><span class="fa fa-medkit"></span> <b>DARSALUD</b></a>
                 </div><!-- navbar-header-->
- 
+
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                            
+
                 </div><!-- bs-example-navbar-collapse-1 -->
     </nav>
-   
+
         <!-- Sidebar -->
 
         <!-- Page Content -->
-        
-    <form class="form-horizontal" action="{{$ids}}/pdfoftalmo" method="post" target="_blank">                  
+
+    <form class="form-horizontal" action="{{$ids}}/pdfoftalmo" method="post" target="_blank">
                        <div class="container">
 <div  style="width:100%; background:#fff; margin-top:1%;">
     <div class="alert alert-info" style="font-size:23px;">Evaluacion Oftalmologica <a style="margin-left:40%;" href="../../pacientes/<?php echo $id;?>" class="btn btn-warning">Ver historial clinico</a><button type = "submit" target="_blank" class = "btn btn-primary" style="margin-left:2%;" data-dismiss = "modal"><span class="fa fa-print"></span>
-              Imprimir 
+              Imprimir
             </button><a style="margin-left:2%;" href="<?php echo $ids;?>/finalizar" class="btn btn-danger">Finalizar</a></div>
     <div class="alert panel panel-success cuerpo" style="background:#fff; margin-top:-2.7%">
-      
+
             <fieldset style="background-color:#BEEABE; padding: 2%;">
                 <legend>
                     Datos del paciente
@@ -69,20 +69,20 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    
+
                     <label class="col-lg-2">Fecha de nacimiento: </label>
                     <div class="col-lg-3">
                         <input type="text" readonly="readonly" class="form-control" name="" value="{{ $paciente->FEC_NAC}}">
                     </div>                                   <label class="col-lg-2">Edad: </label>
                     <div class="col-lg-3">
-                        <input type="text" readonly="readonly" class="form-control" name="" value="<?php 
-      $edad = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente->FEC_NAC)->format('Y'); 
+                        <input type="text" readonly="readonly" class="form-control" name="" value="<?php
+      $edad = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente->FEC_NAC)->format('Y');
       $edad2 = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente->FEC_NAC)->format('m');
       $edad3 = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente->FEC_NAC)->format('d');
-      
+
        echo $date = \Carbon\Carbon::createFromDate($edad,$edad3,$edad2)->age;
        ?>">
-                    </div>                                  
+                    </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-2">Sexo : </label>
@@ -114,7 +114,7 @@
                     </label>
                     <label style="margin-right:10%;">
                     <input type="radio" name="opciones" id="opciones_2" value="NO" checked>
-                      NO 
+                      NO
                     </label>
                 </div>
                 </div>
@@ -140,13 +140,13 @@
                     </div>
                     </div>
                 <div class="form-group">
-                    <label class="col-lg-2">Refractivo : </label>                    
+                    <label class="col-lg-2">Refractivo : </label>
                     <label class="col-lg-1">OD : </label>  <div class="col-lg-4">
                         <input type="text" class="form-control" name="rod" value="">
                     </div>
                    <br/>
                    <br/>
-                    <label class="col-lg-2"> </label>                   
+                    <label class="col-lg-2"> </label>
                     <label class="col-lg-1">OI : </label>
                     <div class="col-lg-4">
                         <input type="text" class="form-control" name="roi" value="">
@@ -176,10 +176,10 @@
                                 <td>OI</td>
                                 <td><input type="text" name="cesi"></td>
                                 <td><input type="text" name="ccii" value=""></td><td><input type="text" name="ceji" value=""></td>
-                                
+
                                 <td><input type="text" name="cavi"></td>
                             </tr>
-                        </table>        
+                        </table>
                     </div>
                     </div>
                     <div class="form-group">
@@ -220,22 +220,22 @@
             <textarea required="yes" name="rfi_psi" class="form-control" rows="3">APTO PARA CONDUCIR LA CATEGORIA " "</textarea>
         </div>
     </div>
-</fieldset>   
+</fieldset>
 <div class = "modal-footer">
             <button type = "submit" target="_blank" class = "btn btn-primary" data-dismiss = "modal"><span class="glyphicon glyphicon-check"></span>
               IMPRIMIR EVALUACION
             </button>
-            
-            
-         </div>  
-        </form>          
+
+
+         </div>
+        </form>
 
                     </div>
                 </div>
             </div>
         </div>
         <!-- /#page-content-wrapper -->
-    
+
 
     {!! Html::script('assets/js/sidebar2.js')!!}
 </body>

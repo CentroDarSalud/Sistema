@@ -72,7 +72,7 @@
             <th><?php echo \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$evamed->FEC_MED)->format('d-m-Y');?></th>
             <th><?php echo \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$evamed->FEC_MED)->format('H:i:s');?></th>
             <th><?php echo $nombre; ?></th>
-            <th><a target="_blank" href="{{ url('/pacientes/'.$id.'/histmedica/'.$evamed->id) }}" class="btn btn-success"><span class="fa fa-file-text"></span></a></th> 
+            <th><a target="_blank" href="{{ url('/pacientes/'.$id.'/histmedica/'.$evamed->id) }}" class="btn btn-success"><span class="fa fa-file-text"></span></a></th>
     </tr>
         <?php endforeach; endif;
 
@@ -103,7 +103,7 @@
             <th><?php echo \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$evapsico->FEC_PSI)->format('d-m-Y');?></th>
             <th><?php echo \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$evapsico->FEC_PSI)->format('H:i:s');?></th>
             <th><?php echo $nombre; ?></th>
-            <th><span class="fa fa-file-text"></span></th>
+            <th><a target="_blank" href="{{ url('/pacientes/'.$id.'/histpsico/'.$evapsico->id) }}" class="btn btn-success"><span class="fa fa-file-text"></span></a></th>
     </tr>
         <?php endforeach; endif;
 

@@ -57,7 +57,7 @@ class EvaluacionesController extends Controller
       if(isset($_POST['guardar'])){
       $ticket=Ticket::find($ids);
       $comprueba= EvaPsico::where('ID_TIC','=',$ids)->first();
-    
+
 
       if($comprueba){
       $idmed=$comprueba->id;
@@ -1612,9 +1612,254 @@ class EvaluacionesController extends Controller
     }
     }
 
+    public function pdfhistpsico($id, $ids)
+    {
+      $psico=Evapsico::find($ids);
+      $pdf = new TCPDF('P','mm','LETTER', true, 'UTF-8', false);
+      $pdf->SetTitle('EVALUACION PSICOLOGICA');
+      $pdf->setPrintHeader(false);
+      $pdf->setPrintFooter(false);
+      $pdf->SetAutoPageBreak(TRUE, 10);
+      $pdf->SetMargins(15, 15, 10);
+      $pdf->AddPage();
+      $pdf->Image('storage/cabecera.jpg', 0, 1, 215, 30, 'JPG', '', '', true, 250, '', false, false, false, false, false, false);
+      $paciente=Paciente::where('id','=',$id)->get();
+
+      $pdf->SetFont('','B','9');
+      $pdf->SetXY(15, 35);
+      $pdf->Write(0,'A) DATOS PERSONALES','','',false);
+
+      $pdf->Line ( 15, 55,55,55,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
+      $pdf->Line ( 65, 55,105,55,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
+      $pdf->Line ( 115, 55,155,55,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
+      $pdf->Line ( 165, 55,205,55,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
+
+      $pdf->SetXY(20, 57);
+      $pdf->SetFont('','B','7');
+      $pdf->Write(0,'APELLIDO PATERNO','','',false);
+      $pdf->SetXY(70, 57);
+      $pdf->Write(0,'APELLIDO MATERNO','','',false);
+      $pdf->SetXY(125, 57);
+      $pdf->Write(0,'NOMBRES','','',false);
+      $pdf->SetXY(180, 57);
+      $pdf->Write(0,'CI','','',false);
+      $pdf->SetXY(18, 50);
+      $pdf->SetFont('','','11');
+      $pdf->Write(0,$paciente[0]->APA_PAC,'','',false);
+      $pdf->SetXY(67, 50);
+      $pdf->SetFont('','','11');
+      $pdf->Write(0,$paciente[0]->AMA_PAC,'','',false);
+      $pdf->SetXY(123, 50);
+      $pdf->SetFont('','','11');
+      $pdf->Write(0,$paciente[0]->NOM_PAC,'','',false);
+      $pdf->SetXY(170, 50);
+      $pdf->SetFont('','','11');
+      $pdf->Write(0,$paciente[0]->CI_PAC,'','',false);
+      $pdf->SetXY(18, 70);
+      $pdf->SetFont('','','11');
+      $pdf->Write(0,$psico->LUG_NAC.' '.$paciente[0]->FEC_NAC,'','',false);
+      $pdf->SetXY(80, 70);
+      $pdf->SetFont('','','11');
+      $edad = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente[0]->FEC_NAC)->format('Y');
+      $edad2 = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente[0]->FEC_NAC)->format('m');
+      $edad3 = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente[0]->FEC_NAC)->format('d');
+      $date = \Carbon\Carbon::createFromDate($edad,$edad2,$edad3)->age;
+      $pdf->Write(0,$date,'','',false);
+      $pdf->SetXY(118, 70);
+      $pdf->SetFont('','','11');
+      $pdf->Write(0,$paciente[0]->PRO_PAC,'','',false);
+      $pdf->SetXY(165, 70);
+      $pdf->SetFont('','','11');
+      $pdf->Write(0,\Carbon\Carbon::now()->format('d-m-Y'),'','',false);
+      $pdf->SetXY(18, 90);
+      $pdf->SetFont('','','11');
+      $pdf->Write(0,$paciente[0]->DOM_PAC,'','',false);
+              $pdf->SetXY(157, 90);
+      $pdf->SetFont('','','11');
+      $pdf->Write(0,$paciente[0]->REF_PAC,'','',false);
+      $pdf->SetXY(18, 110);
+      $pdf->SetFont('','','10');
+      $pdf->Write(0,$psico->HIS_PSI,'','',false);
+
+
+      $pdf->Line ( 15, 75,70,75,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
+      $pdf->Line ( 75, 75,95,75,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
+      $pdf->Line ( 105, 75,150,75,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
+      $pdf->Line ( 160, 75,205,75,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
+      $pdf->SetXY(20, 78);
+      $pdf->SetFont('','B','7');
+      $pdf->Write(0,'LUGAR Y FECHA DE NACIMIENTO','','',false);
+      $pdf->SetXY(80, 78);
+      $pdf->Write(0,'EDAD','','',false);
+      $pdf->SetXY(120, 78);
+      $pdf->Write(0,'PROFESION','','',false);
+      $pdf->SetXY(165, 78);
+      $pdf->Write(0,'FECHA DEL EXAMEN','','',false);
+      $pdf->Line ( 16, 95,205,95,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
+      $pdf->SetXY(95, 98);
+      $pdf->SetFont('','B','7');
+      $pdf->Write(0,'DIRECCION','','',false);
+      $pdf->SetXY(160, 98);
+      $pdf->SetFont('','B','7');
+      $pdf->Write(0,'TELEFONO','','',false);
+      $pdf->SetFont('','B','9');
+      $pdf->SetXY(15, 105);
+      $pdf->Write(0,'B) HISTORIA FAMILIAR','','',false);
+      $pdf->SetXY(15, 143);
+      $pdf->Write(0,'C) EXAMEN PSICOLOGICO','','',false);
+      $pdf->SetXY(15, 150);
+      $pdf->SetFont('','B','7');
+      $pdf->Write(0,'1. Coordinacion visomotora','','',false);
+      $pdf->SetXY(15, 165);
+      $pdf->Write(0,'2. Personalidad','','',false);
+      $pdf->SetXY(15, 180);
+      $pdf->Write(0,'3. Atencion, concentracion, memoria y coordinacion','','',false);
+      $pdf->SetXY(15, 195);
+      $pdf->Write(0,'4. Prueba de reaccion ante situaciones de estres y riesgo','','',false);
+      $pdf->SetXY(62, 158);
+      $pdf->Write(0,'INADECUADO','','',false);
+       $pdf->SetXY(102, 158);
+      $pdf->Write(0,'OBSERVACION','','',false);
+       $pdf->SetXY(22, 173);
+      $pdf->Write(0,'ADECUADO','','',false);
+        $pdf->SetXY(62, 173);
+      $pdf->Write(0,'INADECUADO','','',false);
+        $pdf->SetXY(102, 173);
+      $pdf->Write(0,'OBSERVACION','','',false);
+       $pdf->SetXY(22, 158);
+      $pdf->Write(0,'ADECUADO','','',false);
+      $pdf->SetXY(18, 50);
+      $pdf->SetFont('','','11');
+      if($psico->EX1_PSI=='ADECUADO'){
+
+          $pdf->SetXY(42, 157);
+          $pdf->SetFont('','','11');
+          $pdf->Write(0,'X','','',false);
+      }
+      if($psico->EX1_PSI=='INADECUADO'){
+          $pdf->SetXY(84, 157);
+          $pdf->SetFont('','','11');
+          $pdf->Write(0,'X','','',false);
+      }
+      if($psico->EX1_PSI=='OBSERVACION'){
+          $pdf->SetXY(127, 157);
+          $pdf->SetFont('','','11');
+          $pdf->Write(0,'X','','',false);
+      }
+      if($psico->EX2_PSI=='ADECUADO'){
+
+          $pdf->SetXY(42, 172);
+          $pdf->SetFont('','','11');
+          $pdf->Write(0,'X','','',false);
+      }
+      if($psico->EX2_PSI=='INADECUADO'){
+          $pdf->SetXY(84, 172);
+          $pdf->SetFont('','','11');
+          $pdf->Write(0,'X','','',false);
+      }
+      if($psico->EX2_PSI=='OBSERVACION'){
+          $pdf->SetXY(127, 172);
+          $pdf->SetFont('','','11');
+          $pdf->Write(0,'X','','',false);
+      }
+      if($psico->EX3_PSI=='ADECUADO'){
+
+          $pdf->SetXY(42, 187);
+          $pdf->SetFont('','','11');
+          $pdf->Write(0,'X','','',false);
+      }
+      if($psico->EX3_PSI=='INADECUADO'){
+          $pdf->SetXY(84, 187);
+          $pdf->SetFont('','','11');
+          $pdf->Write(0,'X','','',false);
+      }
+      if($psico->EX3_PSI=='OBSERVACION'){
+          $pdf->SetXY(127, 187);
+          $pdf->SetFont('','','11');
+          $pdf->Write(0,'X','','',false);
+      }
+      if($psico->EX4_PSI=='OPTIMO'){
+
+          $pdf->SetXY(42, 202);
+          $pdf->SetFont('','','11');
+          $pdf->Write(0,'X','','',false);
+      }
+      if($psico->EX4_PSI=='MEDIO'){
+          $pdf->SetXY(84, 202);
+          $pdf->SetFont('','','11');
+          $pdf->Write(0,'X','','',false);
+      }
+      if($psico->EX4_PSI=='INADECUADO'){
+          $pdf->SetXY(127, 202);
+          $pdf->SetFont('','','11');
+          $pdf->Write(0,'X','','',false);
+      }
+      if($psico->EX4_PSI=='OBSERVACION'){
+          $pdf->SetXY(167, 202);
+          $pdf->SetFont('','','11');
+          $pdf->Write(0,'X','','',false);
+      }
+      $pdf->SetFont('','B','7');
+      $pdf->Rect ( 40,155,8,8,'','', '');
+      $pdf->Rect ( 82,155,8,8,'','', '');
+      $pdf->Rect ( 125,155,8,8,'','', '');
+      $pdf->Rect ( 40,170,8,8,'','', '');
+      $pdf->Rect ( 82,170,8,8,'','', '');
+      $pdf->Rect ( 125,170,8,8,'','', '');
+      $pdf->SetXY(22, 188);
+      $pdf->Write(0,'ADECUADO','','',false);
+      $pdf->SetXY(62, 188);
+      $pdf->Write(0,'INADECUADO','','',false);
+      $pdf->SetXY(102, 188);
+      $pdf->Write(0,'OBSERVACION','','',false);
+
+      $pdf->Rect ( 40,185,8,8,'','', '');
+      $pdf->Rect ( 82,185,8,8,'','', '');
+      $pdf->Rect ( 125,185,8,8,'','', '');
+
+       $pdf->SetXY(22, 203);
+      $pdf->Write(0,'OPTIMO','','',false);
+       $pdf->SetXY(62, 203);
+      $pdf->Write(0,'MEDIO','','',false);
+       $pdf->SetXY(102, 203);
+      $pdf->Write(0,'INADECUADO','','',false);
+       $pdf->SetXY(142, 203);
+      $pdf->Write(0,'OBSERVACION','','',false);
+
+      $pdf->Rect ( 40,200,8,8,'','', '');
+      $pdf->Rect ( 82,200,8,8,'','', '');
+      $pdf->Rect ( 125,200,8,8,'','', '');
+      $pdf->Rect ( 165,200,8,8,'','', '');
+       $pdf->SetXY(15, 213);
+       $pdf->SetFont('','B','9');
+      $pdf->Write(0,'RESULTADO FINAL DE LA EVALUACION PSICOLOGICA','','',false);
+      $pdf->SetXY(15, 218);
+       $pdf->SetFont('','B','8');
+      $pdf->Write(0,'OBSERVACIONES: (EN ESTE ACAPITE INCORPORAR SI EL POSTULANTE ES APTO PARA CONDUCIR VEHICULO, SI NO FUERA APTO INDICAR LOS MOTIVOS)','','',false);
+      $pdf->SetXY(30, 229);
+      $pdf->SetFont('','BS','9');
+
+      $pdf->MultiCell(148, 4, $psico->RFI_PSI , 0, 'L', 0, 0, '', '', true);
+      $pdf->Line ( 30, 263,70,263,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
+      $pdf->Line ( 80, 263,120,263,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
+      $pdf->Line ( 130, 263,165,263,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
+       $pdf->SetXY(30, 265);
+       $pdf->SetFont('','B','8');
+      $pdf->Write(0,'SELLO CENTRO DE SALUD','','',false);
+       $pdf->SetXY(85, 265);
+       $pdf->SetFont('','B','8');
+      $pdf->Write(0,'SELLO PSICOLOGO/A','','',false);
+       $pdf->SetXY(130, 265);
+       $pdf->SetFont('','B','8');
+      $pdf->Write(0,'FIRMA PSICOLOGO/A','','',false);
+      $pdf->SetXY(180,230);
+      $pdf->SetFont('','','11');
+      $pdf->write2DBarcode ( 'Paciente :'.$paciente[0]->NOM_PAC.' '.$paciente[0]->APA_PAC.' '.$paciente[0]->AMA_PAC.' | Medico: '.Auth::user()->NOM_USU.' '.Auth::user()->APA_USU.' '.Auth::user()->AMA_USU.' | Fecha:'.Carbon::now(), 'QRCODE,M', 181, 230, 30, 30, '','','');
+      $pdf->Output('EvaluacionPsicologica.pdf');
+    }
     public function pdfhistmedi($id, $ids)
     {
-        $medica=Evamedi::find($ids);
+        $medica=EvaMedi::find($ids);
         $pdf = new TCPDF('P','mm','LETTER', true, 'UTF-8', false);
         $pdf->SetTitle('EVALUACION MEDICA');
         $pdf->setPrintHeader(false);
@@ -2163,11 +2408,21 @@ class EvaluacionesController extends Controller
      public function pdfreceta(Request $request,$id)
 
     {
-        $receta=new Receta;
-        $receta->DES_REC=$request->input('rec_med');
-        $receta->ID_PAC=$id;
-        $receta->FEC_REC=Carbon::now();
-        $receta->save();
+      $receta=new Receta;
+      $receta->DES_REC=$request->input('rec_med');
+      $receta->ID_PAC=$id;
+      $receta->FEC_REC=Carbon::now();
+
+        if(isset($_POST['finreceta'])){
+          $receta->save();
+          $pacientes= Paciente::find($id);
+          $evamedi=Evamedi::where('ID_PAC','=',$id)->join('users','ID_USU','=','users.id')->select('FEC_MED','evaluacionmedica.id','NOM_USU','APA_USU','AMA_USU')->get();
+          $evapsi=EvaPsico::where('ID_PAC','=',$id)->join('users','ID_MED','=','users.id')->select('FEC_PSI','evaluacionpsicologica.id','NOM_USU','APA_USU','AMA_USU')->get();
+          $evaoto=EvaOto::where('ID_PAC','=',$id)->join('users','ID_MED','=','users.id')->select('FEC_OTO','evaluacionotorrino.id','NOM_USU','APA_USU','AMA_USU')->get();
+          $evaoft=EvaOftalmo::where('ID_PAC','=',$id)->join('users','ID_MED','=','users.id')->select('FEC_OFT','evaluacionoftalmo.id','NOM_USU','APA_USU','AMA_USU')->get();
+          $recetas=Receta::where('ID_PAC','=',$id)->join('users','ID_MED','=','users.id')->select('FEC_REC','recetas.id','NOM_USU','APA_USU','AMA_USU')->get();
+          return redirect()->route('pacientes/{id}',['id'=>$id])->with('pacientes',$pacientes)->with('id',$id)->with('evamedi',$evamedi)->with('evapsi',$evapsi)->with('evaoto',$evaoto)->with('evaoft',$evaoft)->with('recetas',$recetas);
+        }else{
         $pagelayout = array('165', '107.5');
         $pdf = new TCPDF('P','mm',$pagelayout, true, 'UTF-8', false);
         $pdf->SetTitle('RECETA MEDICA');
@@ -2179,78 +2434,48 @@ class EvaluacionesController extends Controller
 
 
         $pdf->SetFont('','B','9');
-        $pdf->SetXY(15, 35);
-        $pdf->Write(0,'A) DATOS PERSONALES','','',false);
-
-        $pdf->Line ( 15, 55,55,55,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
-        $pdf->Line ( 65, 55,105,55,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
-        $pdf->Line ( 115, 55,155,55,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
-        $pdf->Line ( 165, 55,205,55,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
-        $paciente=Paciente::where('id','=',$id)->get();
-        $pdf->SetXY(20, 57);
-        $pdf->SetFont('','B','7');
-        $pdf->Write(0,'APELLIDO PATERNO','','',false);
-        $pdf->SetXY(70, 57);
-        $pdf->Write(0,'APELLIDO MATERNO','','',false);
-        $pdf->SetXY(125, 57);
-        $pdf->Write(0,'NOMBRES','','',false);
-        $pdf->SetXY(180, 57);
-        $pdf->Write(0,'CI','','',false);
-        $pdf->SetXY(18, 50);
-        $pdf->SetFont('','','11');
-        $pdf->Write(0,$paciente[0]->NOM_PAC,'','',false);
-        $pdf->SetXY(67, 50);
-        $pdf->SetFont('','','11');
-        $pdf->Write(0,$paciente[0]->APA_PAC,'','',false);
-        $pdf->SetXY(123, 50);
-        $pdf->SetFont('','','11');
-        $pdf->Write(0,$paciente[0]->AMA_PAC,'','',false);
-        $pdf->SetXY(170, 50);
-        $pdf->SetFont('','','11');
-        $pdf->Write(0,$paciente[0]->CI_PAC,'','',false);
-        $pdf->SetXY(18, 70);
-        $pdf->SetFont('','','11');
-        $pdf->Write(0,$request->input('lug_nac').' '.$paciente[0]->FEC_NAC,'','',false);
-        $pdf->SetXY(80, 70);
-        $pdf->SetFont('','','11');
-        $edad = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente[0]->FEC_NAC)->format('Y');
-        $edad2 = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente[0]->FEC_NAC)->format('m');
-        $edad3 = \Carbon\Carbon::createFromFormat('Y-m-d', $paciente[0]->FEC_NAC)->format('d');
-        $date = \Carbon\Carbon::createFromDate($edad,$edad3,$edad2)->age;
-        $pdf->Write(0,$date,'','',false);
-        $pdf->SetXY(118, 70);
-        $pdf->SetFont('','','11');
-        $pdf->Write(0,$paciente[0]->PRO_PAC,'','',false);
-        $pdf->SetXY(165, 70);
-        $pdf->SetFont('','','11');
-        $pdf->Write(0,\Carbon\Carbon::now()->format('d-m-Y'),'','',false);
-        $pdf->SetXY(18, 90);
-        $pdf->SetFont('','','11');
-        $pdf->Write(0,$paciente[0]->DOM_PAC,'','',false);
-        $pdf->SetXY(18, 110);
-        $pdf->SetFont('','','11');
-        $pdf->Write(0,$request->input('his_psi'),'','',false);
+        $pdf->SetXY(7, 35);
+        $pdf->Write(0,'Paciente:','','',false);
 
 
-        $pdf->Line ( 15, 75,70,75,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
-        $pdf->Line ( 75, 75,95,75,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
-        $pdf->Line ( 105, 75,150,75,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
-        $pdf->Line ( 160, 75,205,75,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
-        $pdf->SetXY(20, 78);
-        $pdf->SetFont('','B','7');
-        $pdf->Write(0,'LUGAR Y FECHA DE NACIMIENTO','','',false);
-        $pdf->SetXY(80, 78);
-        $pdf->Write(0,'EDAD','','',false);
-        $pdf->SetXY(120, 78);
-        $pdf->Write(0,'PROFESION','','',false);
-        $pdf->SetXY(165, 78);
-        $pdf->Write(0,'FECHA DEL EXAMEN','','',false);
-        $pdf->Line ( 16, 95,205,95,array('width' => 0.3,'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
+        $paciente=Paciente::where('id','=',$id)->first();
 
-        $pdf->write2DBarcode ( 'Paciente :'.$paciente[0]->NOM_PAC.' '.$paciente[0]->APA_PAC.' '.$paciente[0]->AMA_PAC.' | Medico: '.Auth::user()->NOM_USU.' '.Auth::user()->APA_USU.' '.Auth::user()->AMA_USU.' | Fecha:'.$receta->FEC_REC, 'QRCODE,M', 170, 230, 30, 30, '','','');
-        $pdf->Output('EvaluacionPsicologica.pdf');
+        $nom=$paciente->NOM_PAC.' '.$paciente->APA_PAC.' '.$paciente->AMA_PAC;
+        $pdf->SetXY(25, 35);
+        $pdf->SetFont('','','8');
+        $pdf->Write(0,ucwords(strtolower($nom)),'','',false);
+
+        $pdf->SetFont('','B','9');
+        $pdf->SetXY(9, 45);
+        $pdf->Write(0,'Medico:','','',false);
+
+        $pdf->SetXY(25, 45);
+        $pdf->SetFont('','','8');
+        $pdf->Write(0,Auth::user()->NOM_USU.' '.Auth::user()->APA_USU.' '.Auth::user()->AMA_USU,'','',false);
+
+        $pdf->SetXY(10, 55);
+        $pdf->SetFont('','B','14');
+        $pdf->Write(0,'R.f.','','',false);
+
+        $pdf->SetXY(10, 65);
+        $pdf->SetFont('','','10');
+        $pdf->MultiCell(150, 10,$receta->DES_REC, 0, 'L', 0, 0, '', '', true);
+
+        $pdf->write2DBarcode ( 'Paciente :'.$paciente->NOM_PAC.' '.$paciente->APA_PAC.' '.$paciente->AMA_PAC.' | Medico: '.Auth::user()->NOM_USU.' '.Auth::user()->APA_USU.' '.Auth::user()->AMA_USU.' | Fecha:'.$receta->FEC_REC, 'QRCODE,M', 80, 135, 20, 20, '','','');
+
+
+        $pdf->Output('Receta.pdf');
+      }
     }
 
+    public function finreceta($request)
+    {
+      $receta=new Receta;
+      $receta->DES_REC=$request->input('rec_med');
+      $receta->ID_PAC=$id;
+      $receta->FEC_REC=Carbon::now();
+      //$receta->save();
+    }
     /**
      * Display the specified resource.
      *
