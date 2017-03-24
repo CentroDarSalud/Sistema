@@ -31,16 +31,16 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffff88', end
 </style>
 <script language="javascript">
   function atencion()
-  { id=1;  
+  { id=1;
     $.post("atencion", { id: id }, function(data){
-                $("#atencion").html(data); 
-            });            
+                $("#atencion").html(data);
+            });
       setTimeout('atencion()',6000);
   }
   $(document).ready(function()
     {
         atencion();
-    });  
+    });
 </script>
 <script type="text/javascript">
               $(document).ready(function() { setTimeout(function(){ $(".mensajewarning").fadeIn(2500); },0000); });
@@ -68,23 +68,36 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffff88', end
 			<tr>
 				<th>CI</th>
 				<th>Paciente</th>
+        <th>Numero de Historia clinica</th>
 				<th>Ver Historial</th>
 			</tr>
 		</thead>
 		<tbody>
 			 <?php if(count($pacientes)>0):?>
       <tr>
-        <?php  
+        <?php
           foreach ($pacientes as $paciente):
             $nombre=$paciente->NOM_PAC.' '.$paciente->APA_PAC.' '.$paciente->AMA_PAC;
           ?>
             <th><?php echo $paciente->CI_PAC;?></th>
             <th><?php echo $nombre; ?></th>
-       
-            <th><a class="btn btn-success" href="pacientes/{{$paciente->id}}" title="Ver historial"> <span class="fa fa-search"> </span> </a></th> 
+            <th
+              <?php
+               $com=\Darsalud\Consultaext::where('ID_PAC','=',$paciente->id)->first();
+                  if(isset($com))
+                  {
+                    echo 'class="success">'.$com->HCL_COE;
+                  }
+                  else
+                  {
+                    echo 'class="danger">NO REGISTRA';
+                  }
+              ?>
+            </th>
+            <th><a class="btn btn-success" href="pacientes/{{$paciente->id}}" title="Ver historial"> <span class="fa fa-search"> </span> </a></th>
     </tr>
         <?php endforeach; endif;
-      
+
       ?>
 		</tbody>
 	</table>
