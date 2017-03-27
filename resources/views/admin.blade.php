@@ -8,12 +8,21 @@
     <meta name="author" content="">
 	<title>Panel de administrador - Dar salud</title>
 	{!! Html::style('assets/css/bootstrap.css') !!}
-	{!! Html::script('DataTables/datatables.min.css')!!}
-	  <link href="font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet">
-	{!! Html::style('assets/css/sidebar.css') !!}
-	{!! Html::script('assets/js/ajax.js')!!}
-	{!! Html::script('assets/js/bootstrap.js')!!}
-	{!! Html::script('assets/js/sidebar2.js')!!}
+
+    {!! Html::style('css/table/jquery.dataTables.css')!!}
+      <link href="font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet">
+    {!! Html::style('assets/css/sidebar.css') !!}
+    {!! Html::script('assets/js/ajax.js')!!}
+    {!! Html::script('assets/js/sidebar2.js')!!}
+{!! Html::script('js/table/jquery.dataTables.js')!!}
+    {!! Html::script('assets/js/bootstrap.js')!!}
+
+
+<script type="text/javascript" language="javascript" class="init">
+            $(document).ready(function() {
+    $('#example').DataTable();
+} );
+        </script>
 </head>
 <body style="background-image:url({{ asset('img/fondo.jpg') }});">
 
@@ -23,7 +32,7 @@
                     <button type="button"  class="navbar-toggle collapsed" data-toggle="collapse"  id="menu-toggle">
                       <span  class="glyphicon glyphicon-th-large" aria-hidden="true" style="color: #fff;"></span>
                     </button>
-                    <a class="navbar-brand" href="#" style="color: #21D3F3; padding-left: 14%; font-size: 25px;"><span class="fa fa-medkit"></span> <b>DARSALUD</b></a>
+                    <a class="navbar-brand" href="{{url('/')}}" style="color: #21D3F3; padding-left: 14%; font-size: 25px;"><span class="fa fa-medkit"></span> <b>DARSALUD</b></a>
                 </div><!-- navbar-header-->
 
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -52,7 +61,7 @@
                 <li>
                     <a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-male fa-stack-1x "></i></span> Administrar contenido <span class="fa-stack fa-lg pull-right"><i class="fa fa-caret-down fa-stack-1x "></i></span></a>
                     <ul class="nav-pills nav-stacked" style="list-style-type:none;">
-                      <li><a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-edit fa-stack-1x "></i></span>Clientes</a></li>
+                      <li><a href="adminpaciente"><span class="fa-stack fa-lg pull-left"><i class="fa fa-edit fa-stack-1x "></i></span>Clientes</a></li>
                       <li><a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-stethoscope fa-stack-1x "></i></span>Especialidades</a></li>
                       <li><a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-users fa-stack-1x "></i></span>Usuarios</a></li>
                       <li><a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-medkit fa-stack-1x "></i></span>Productos de farmacia</a></li>

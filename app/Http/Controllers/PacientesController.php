@@ -34,6 +34,11 @@ class PacientesController extends Controller
             $medicos = User::where('NIV_USU','=',2)->get();
            return view('registropacientes')->with('pacientes',$pacientes)->with('actividades',$actividades)->with('especialidades',$especialidades)->with('especialidades2',$especialidades2)->with('medicos',$medicos);
     }
+    public function adminpacientes()
+    {
+      $clientes= Paciente::get();
+      return view('administrador/clientes')->with('clientes',$clientes);
+    }
     public function modificar(Request $request)
     {
       $paciente= Paciente::find($request->input('id_pac'));
