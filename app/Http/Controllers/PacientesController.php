@@ -39,6 +39,12 @@ class PacientesController extends Controller
       $clientes= Paciente::get();
       return view('administrador/clientes')->with('clientes',$clientes);
     }
+    public function informemedico()
+    {
+      $tickets= Ticket::groupBy('ID_MED','')->get();
+      dd($tickets);
+      return view('administrador/informemedico')->with('tickets',$tickets);
+    }
     public function modificar(Request $request)
     {
       $paciente= Paciente::find($request->input('id_pac'));

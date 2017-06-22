@@ -7,7 +7,7 @@
     $('#example').DataTable();
 } );
 		</script>
-		
+
 <fieldset>
 <legend>Reservas</legend>
 <script type="text/javascript">
@@ -33,28 +33,35 @@
 			<th>Paciente</th>
       <th>Evaluacion</th>
       <th>Medico asignado</th>
+			<th>Accion</th>
 		</tr>
 	</thead>
-	
+
 	<tbody style="font-size:14px;">
 		 <?php if(count($reservas)>0):?>
-      <tr 
-        <?php  
+      <tr
+        <?php
+
           foreach ($reservas as $reservas):
+						$paciente=$reservas->ID_TIC;
+						$ticket=\Darsalud\Ticket::find($paciente);
+						$pac=$ticket->ID_PAC;
+						 $nombre=  preg_replace('[\s+]','', $ticket->EVA_TIC);
          if($reservas->FEC_RES <= \Carbon\Carbon::now()->toDateString()){ ?>
          style="background-color:#F15964; color:#FFFFFF">
-         <?php }?>
+         <?php }else { echo ">";} ?>
             <th><?php echo $reservas->FEC_RES;?></th>
             <th><?php echo $reservas->HOR_RES;?></th>
             <th><?php echo $reservas->NOM_PAC.' '.$reservas->APA_PAC.' '.$reservas->AMA_PAC; ?></th>
             <th><?php echo $reservas->EVA_TIC; ?></th>
             <th><?php echo $reservas->NOM_USU.' '.$reservas->APA_USU.' '.$reservas->AMA_USU;?></th>
-            
+						<th><a class="btn btn-info" href="{{ 'pacientes/'. $pac.'/'.strtolower($nombre).'/'.$reservas->ID_TIC}}" title="Atender" > <span class="fa fa-check"> </span> </a></th>
+
     </tr>
         <?php endforeach; endif;
-      
+
       ?>
-		
+
 	</tbody>
 </table>
 </div>
@@ -62,22 +69,22 @@
 
 
 
-<div class = "modal fade" id = "myModal" tabindex = "-1" role = "dialog" 
+<div class = "modal fade" id = "myModal" tabindex = "-1" role = "dialog"
    aria-labelledby = "myModalLabel" aria-hidden = "true" >
-   
+
    <div class = "modal-dialog">
       <div class = "modal-content">
-         
+
          <div class = "modal-header">
             <button type = "button" class = "close" data-dismiss = "modal" aria-hidden = "true">
                   &times;
             </button>
-            
+
             <h4 class = "modal-title" id = "myModalLabel">
              Nuevo producto
             </h4>
          </div>
-         
+
          <div class = "modal-body">
             <form class="form-horizontal" method="POST" action="registrarproducto">
         <div class="form-group">
@@ -88,7 +95,7 @@
 
     </div>
 
-         </div>   
+         </div>
           <div class="form-group">
               <label  class="col-lg-4 control-label">Nombre del producto :</label>
           <div class="col-lg-5">
@@ -126,21 +133,21 @@
          </div>
 
 
-         
+
          <div class = "modal-footer">
             <button type = "button" class = "btn btn-danger" data-dismiss = "modal">
             <span class="fa fa-stick"></span>  Cancelar
             </button>
-            
+
             <button type = "submit" class = "btn btn-primary">
                Guardar
             </button>
             </form>
          </div>
-         
+
       </div><!-- /.modal-content -->
    </div><!-- /.modal-dialog -->
-  
+
 </div><!-- /.modal -->
   </div>
 </div>

@@ -72,7 +72,7 @@
                     <a href="#"> <span class="fa-stack fa-lg pull-left"><i class="fa fa-usd fa-stack-1x "></i></span>Reporte de ventas</a>
                 </li>
                 <li>
-                    <a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-info fa-stack-1x "></i></span>Informe por medicos</a>
+                    <a href="informemedicos"><span class="fa-stack fa-lg pull-left"><i class="fa fa-info fa-stack-1x "></i></span>Informe por medicos</a>
                 </li>
                 <li>
                     <a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-folder-open-o fa-stack-1x "></i></span>Informe por evaluaciones</a>
